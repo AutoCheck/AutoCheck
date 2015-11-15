@@ -15,3 +15,14 @@ let promote f =
     Gen(fun n r a ->
         let (Gen m) = f a
         m n r)
+
+let variant v (Gen m) =
+    let rec rands r n =
+        match n with
+        | 0 -> r
+        | _ ->
+            let (r1, r2) = split r
+            let (n', mo) = (n / 2, n % 2)
+            if mo = 0 then rands r1 n'
+            else rands r2 n'
+    Gen(fun n r -> m n (rands r v))
