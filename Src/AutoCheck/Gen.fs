@@ -10,3 +10,8 @@ let sized g =
         m n r)
 
 let resize n (Gen m) = Gen(fun _ r -> m n r)
+
+let promote f =
+    Gen(fun n r a ->
+        let (Gen m) = f a
+        m n r)
