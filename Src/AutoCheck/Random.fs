@@ -2,6 +2,7 @@
 module internal AutoCheck.Random
 
 type StdGen =
-    | StdGen of unit
+    private
+    | StdGen of int * int
 
 let split g = (g, g)
