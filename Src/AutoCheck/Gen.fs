@@ -26,3 +26,8 @@ let variant v (Gen m) =
             if mo = 0 then rands r1 n'
             else rands r2 n'
     Gen(fun n r -> m n (rands r v))
+
+let generate n (Gen m) =
+    let rnd = createStdGen randomSeed
+    let (size, rnd') = randomR (0, n) rnd
+    m size rnd'
