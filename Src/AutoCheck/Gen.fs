@@ -33,3 +33,12 @@ let generate n (Gen m) =
     m size rnd'
 
 let init a = Gen(fun n r -> a)
+
+let bind (Gen m) f =
+    Gen(fun n r0 ->
+        let r1, r2 = split r0
+        let (Gen m') = f (m n r1)
+        m' n r2)
+
+module Operators =
+    let (>>=) m f = bind m f
