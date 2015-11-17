@@ -49,6 +49,9 @@ let map f m =
     bind m (fun m' ->
         init (f m'))
 
+let map2 f m1 m2 =
+    apply (apply (init f) m1) m2
+
 module Operators =
     let (>>=) m f = bind m f
     let (<*>) f m = apply f m
