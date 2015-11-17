@@ -40,5 +40,16 @@ let bind (Gen m) f =
         let (Gen m') = f (m n r1)
         m' n r2)
 
+let apply f m =
+    bind f (fun f' ->
+        bind m (fun m' ->
+            init (f' m')))
+
+let map f m =
+    bind m (fun m' ->
+        init (f m'))
+
 module Operators =
     let (>>=) m f = bind m f
+    let (<*>) f m = apply f m
+    let (<!>) f m = map f m
