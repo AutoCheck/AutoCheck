@@ -56,3 +56,15 @@ module Operators =
     let (>>=) m f = bind m f
     let (<*>) f m = apply f m
     let (<!>) f m = map f m
+
+[<AutoOpen>]
+module Builder =
+    type GenBuilder() =
+        member this.Bind       (m1, m2) = bind m1 m2
+        member this.Combine    (m1, m2) = bind m1 (fun () -> m2)
+        member this.Delay      (f)      = bind (init()) f
+        member this.Return     (x)      = init x
+        member this.ReturnFrom (f)      = f
+        member this.Zero       ()       = init()
+
+    let gen = GenBuilder()
