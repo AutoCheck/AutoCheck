@@ -31,3 +31,5 @@ let generate n (Gen m) =
     let rnd = createStdGen randomSeed
     let (size, rnd') = randomR (0, n) rnd
     m size rnd'
+
+let init a = Gen(fun n r -> a)
