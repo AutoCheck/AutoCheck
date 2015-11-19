@@ -68,3 +68,6 @@ module Builder =
         member this.Zero       ()       = init()
 
     let gen = GenBuilder()
+
+let choose bounds =
+    Gen (fun n r -> r) |> map (fst << randomR bounds)
