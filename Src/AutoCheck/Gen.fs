@@ -80,3 +80,13 @@ let elements xs =
 let oneof gens =
     let join x = bind x id
     join (elements gens)
+
+let frequency xs =
+    let upperBound = List.sumBy fst xs
+    let rec pick n =
+        function
+        | (k, x) :: xs when n <= k -> x
+        | (k, x) :: xs             -> pick (n - k) xs
+
+    gen { let! rand = choose (1, upperBound)
+          return! pick rand xs }
