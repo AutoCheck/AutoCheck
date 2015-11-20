@@ -70,7 +70,7 @@ module Builder =
     let gen = GenBuilder()
 
 let choose bounds =
-    Gen (fun n r -> r) |> map (fst << randomR bounds)
+    Gen (fun n r -> r) |> map (randomR bounds >> fst)
 
 let elements xs =
     // http://stackoverflow.com/a/1817654/467754
