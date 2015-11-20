@@ -76,3 +76,7 @@ let elements xs =
     // http://stackoverflow.com/a/1817654/467754
     let flip f x y = f y x
     choose (0, (Seq.length xs) - 1) |> map (flip Seq.item xs)
+
+let oneof gens =
+    let join x = bind x id
+    join (elements gens)
