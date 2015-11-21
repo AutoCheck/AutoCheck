@@ -52,6 +52,9 @@ let map f m =
 let map2 f m1 m2 =
     apply (apply (init f) m1) m2
 
+let map3 f m1 m2 m3 =
+    apply (apply (apply (init f) m1) m2) m3
+
 module Operators =
     let (>>=) m f = bind m f
     let (<*>) f m = apply f m
@@ -92,3 +95,5 @@ let frequency xs =
           return! pick rand xs }
 
 let two g = map2 (fun a b -> a, b) g g
+
+let three g = map3 (fun a b c -> a, b, c) g g g
