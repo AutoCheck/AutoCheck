@@ -97,8 +97,6 @@ let frequency xs =
     gen { let! rand = choose (1, upperBound)
           return! pick rand xs }
 
-let two g = map2 (fun a b -> a, b) g g
-
-let three g = map3 (fun a b c -> a, b, c) g g g
-
-let four g = map4 (fun a b c d -> a, b, c, d) g g g g
+let two   g = map2 (fun a b     -> a, b)       g g
+let three g = map3 (fun a b c   -> a, b, c)    g g g
+let four  g = map4 (fun a b c d -> a, b, c, d) g g g g
