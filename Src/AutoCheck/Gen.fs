@@ -55,6 +55,9 @@ let map2 f m1 m2 =
 let map3 f m1 m2 m3 =
     apply (apply (apply (init f) m1) m2) m3
 
+let map4 f m1 m2 m3 m4 =
+    apply (apply (apply (apply (init f) m1) m2) m3) m4
+
 module Operators =
     let (>>=) m f = bind m f
     let (<*>) f m = apply f m
@@ -97,3 +100,5 @@ let frequency xs =
 let two g = map2 (fun a b -> a, b) g g
 
 let three g = map3 (fun a b c -> a, b, c) g g g
+
+let four g = map4 (fun a b c d -> a, b, c, d) g g g g
