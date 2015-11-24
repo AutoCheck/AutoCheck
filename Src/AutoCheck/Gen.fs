@@ -28,7 +28,7 @@ let variant v (Gen m) =
     Gen(fun n r -> m n (rands r v))
 
 let generate n (Gen m) =
-    let rnd = createStdGen randomSeed
+    let rnd = createStdGen (randomSeed ())
     let (size, rnd') = randomR (0, n) rnd
     m size rnd'
 

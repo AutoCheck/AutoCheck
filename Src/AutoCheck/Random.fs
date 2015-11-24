@@ -9,5 +9,5 @@ type StdGen =
 
 let split g = (g, g)
 let createStdGen i = StdGen(i, i)
-let randomSeed = int32 DateTime.UtcNow.Ticks
+let randomSeed () = int32 DateTime.UtcNow.Ticks
 let randomR a g = (fst a, g)
