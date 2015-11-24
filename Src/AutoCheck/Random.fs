@@ -24,6 +24,12 @@ let split (StdGen (s1, s2) as std) =
 
     (StdGen (s1', t2), StdGen (t1, s2'))
 
-let createStdGen i = StdGen(i, i)
+let createStdGen i =
+    let s       = i &&& Int32.MaxValue
+    let (q, s1) = (s / 2147483562, s % 2147483562)
+    let s2      = q % 2147483398
+
+    StdGen (s1 + 1, s2 + 1)
+
 let randomSeed () = int32 DateTime.UtcNow.Ticks
 let randomR a g = (fst a, g)
