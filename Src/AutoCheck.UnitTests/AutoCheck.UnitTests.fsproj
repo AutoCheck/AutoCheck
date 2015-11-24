@@ -44,7 +44,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AssemblyInfo.fs" />
-    <Compile Include="Library1.fs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\AutoCheck\AutoCheck.fsproj">
