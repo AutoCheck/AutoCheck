@@ -36,7 +36,7 @@ let createStdGen i =
 let rec randomR (l, h) rng =
     if l > h then randomR (h, l) rng
     else
-        let (l', h')    = (Int32.MinValue, Int32.MaxValue)
+        let (l', h')    = (32767, 2147483647)
         let b           = h' - l' + 1
         let q           = 1000
         let k           = h - l + 1
