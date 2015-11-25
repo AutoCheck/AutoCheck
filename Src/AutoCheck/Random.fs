@@ -33,8 +33,6 @@ let createStdGen i =
 
     StdGen (s1 + 1, s2 + 1)
 
-let randomSeed () = int32 DateTime.UtcNow.Ticks
-
 let rec randomR (l, h) rng =
     if l > h then randomR (h, l) rng
     else
@@ -52,3 +50,5 @@ let rec randomR (l, h) rng =
         let (v, rng') = f 1 0 rng
 
         (l + v % k), rng'
+
+let randomSeed () = int32 DateTime.UtcNow.Ticks
