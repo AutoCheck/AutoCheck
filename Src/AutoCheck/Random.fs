@@ -1,8 +1,6 @@
 ﻿[<AutoOpen>]
 module internal AutoCheck.Random
 
-open System
-
 type StdGen =
     private
     | StdGen of int * int
@@ -27,7 +25,7 @@ let split (StdGen (s1, s2) as std) =
     (StdGen (s1', t2), StdGen (t1, s2'))
 
 let createStdGen i =
-    let s       = i &&& Int32.MaxValue
+    let s       = i &&& 2147483647
     let (q, s1) = (s / 2147483562, s % 2147483562)
     let s2      = q % 2147483398
 
@@ -51,4 +49,4 @@ let rec randomR (l, h) rng =
 
         (l + v % k), rng'
 
-let randomSeed () = int32 DateTime.UtcNow.Ticks
+let randomSeed () = int32 System.DateTime.UtcNow.Ticks
