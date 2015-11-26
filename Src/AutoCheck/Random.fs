@@ -49,4 +49,3 @@ let rec range (l, h) rng =
 
         (l + v % k), rng'
 
-let seed () = int32 System.DateTime.UtcNow.Ticks

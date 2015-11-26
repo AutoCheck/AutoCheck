@@ -28,9 +28,10 @@ let variant v (Gen m) =
     Gen(fun n r -> m n (rands r v))
 
 let generate n (Gen m) =
-    let rnd = Random.create (Random.seed ())
-    let (size, rnd') = Random.range (0, n) rnd
-    m size rnd'
+    let seed = System.DateTime.UtcNow.Ticks |> int
+    let rand = Random.create seed
+    let (size, rand') = Random.range (0, n) rand
+    m size rand'
 
 let init a = Gen(fun n r -> a)
 
