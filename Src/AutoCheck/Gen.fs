@@ -34,6 +34,12 @@ let variant v (Gen m) =
             else rands r2 n'
     Gen(fun n r -> m n (rands r v))
 
+/// <summary>
+/// Runs a generator, in order to produce a random element.
+/// </summary>
+/// <param name="n">The size to be passed to the generator.</param>
+/// <param name="seed">The seed, in order to get different results on each run.
+/// </param>
 let generate n seed (Gen m) =
     let rand = Random.create seed
     let (size, rand') = Random.range (0, n) rand
