@@ -24,15 +24,15 @@ let split (StdGen (s1, s2) as std) =
 
     (StdGen (s1', t2), StdGen (t1, s2'))
 
-let createStdGen i =
+let create i =
     let s       = i &&& 2147483647
     let (q, s1) = (s / 2147483562, s % 2147483562)
     let s2      = q % 2147483398
 
     StdGen (s1 + 1, s2 + 1)
 
-let rec randomR (l, h) rng =
-    if l > h then randomR (h, l) rng
+let rec range (l, h) rng =
+    if l > h then range (h, l) rng
     else
         let (l', h')    = (32767, 2147483647)
         let b           = h' - l' + 1
@@ -49,4 +49,4 @@ let rec randomR (l, h) rng =
 
         (l + v % k), rng'
 
-let randomSeed () = int32 System.DateTime.UtcNow.Ticks
+let seed () = int32 System.DateTime.UtcNow.Ticks

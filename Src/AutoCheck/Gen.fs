@@ -21,22 +21,22 @@ let variant v (Gen m) =
         match n with
         | 0 -> r
         | _ ->
-            let (r1, r2) = split r
+            let (r1, r2) = Random.split r
             let (n', mo) = (n / 2, n % 2)
             if mo = 0 then rands r1 n'
             else rands r2 n'
     Gen(fun n r -> m n (rands r v))
 
 let generate n (Gen m) =
-    let rnd = createStdGen (randomSeed ())
-    let (size, rnd') = randomR (0, n) rnd
+    let rnd = Random.create (Random.seed ())
+    let (size, rnd') = Random.range (0, n) rnd
     m size rnd'
 
 let init a = Gen(fun n r -> a)
 
 let bind (Gen m) f =
     Gen(fun n r0 ->
-        let r1, r2 = split r0
+        let r1, r2 = Random.split r0
         let (Gen m') = f (m n r1)
         m' n r2)
 
@@ -76,7 +76,7 @@ module Builder =
     let gen = GenBuilder()
 
 let choose (lower, upper) =
-    Gen (fun n r -> r) |> map (randomR (lower, upper) >> fst)
+    Gen (fun n r -> r) |> map (Random.range (lower, upper) >> fst)
 
 let elements xs =
     // http://stackoverflow.com/a/1817654/467754
