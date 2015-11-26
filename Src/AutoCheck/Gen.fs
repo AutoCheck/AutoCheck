@@ -1,9 +1,16 @@
 ﻿module AutoCheck.Gen
 
+/// <summary>
+/// A generator for values of type 'a.
+/// </summary>
 type Gen<'a> =
     private
     | Gen of (int -> StdGen -> 'a)
 
+/// <summary>
+/// Used to construct generators that depend on the size parameter.
+/// </summary>
+/// <param name="g">A generator for values of type 'a.</param>
 let sized g =
     Gen(fun n r ->
         let (Gen m) = g n
@@ -75,6 +82,12 @@ module Builder =
 
     let gen = GenBuilder()
 
+/// <summary>
+/// Generates a random element in the given inclusive range, uniformly distrib-
+/// uted in the closed interval [lower,upper].
+/// </summary>
+/// <param name="lower">The lower bound.</param>
+/// <param name="upper">The upper bound.</param>
 let choose (lower, upper) =
     Gen (fun n r -> r) |> map (Random.range (lower, upper) >> fst)
 
