@@ -1,4 +1,5 @@
+redirects: on
 source https://www.nuget.org/api/v2
 
-nuget xunit = 1.9.2
+nuget AutoFixture.Xunit
 nuget Unquote >= 3.0
