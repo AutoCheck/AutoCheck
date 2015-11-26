@@ -27,8 +27,7 @@ let variant v (Gen m) =
             else rands r2 n'
     Gen(fun n r -> m n (rands r v))
 
-let generate n (Gen m) =
-    let seed = System.DateTime.UtcNow.Ticks |> int
+let generate n seed (Gen m) =
     let rand = Random.create seed
     let (size, rand') = Random.range (0, n) rand
     m size rand'
