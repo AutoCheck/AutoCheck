@@ -16,6 +16,11 @@ let sized g =
         let (Gen m) = g n
         m n r)
 
+/// <summary>
+/// Overrides the size parameter. Returns a generator which uses the given size
+/// instead of the runtime-size parameter.
+/// </summary>
+/// <param name="n">The size that's going to override the runtime-size.</param>
 let resize n (Gen m) = Gen(fun _ r -> m n r)
 
 let promote f =
