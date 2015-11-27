@@ -54,3 +54,13 @@ let ``Sized passes the current size`` seed (size : int) =
     let upper =  size |> Math.Abs
     let lower = -size
     test <@ actual >= lower && actual <= upper @>
+
+[<Theory; AutoData>]
+let ``Elements generates one of the given values`` (xs : int[]) (seeds : Generator<int>) size =
+    let g = Gen.elements xs
+    let seed i = seeds |> Seq.item i
+
+    let actual =
+        [ for i in 1..30 -> Gen.generate size (seed i) g ]
+
+    test <@ xs |> Seq.except actual |> Seq.isEmpty @>
