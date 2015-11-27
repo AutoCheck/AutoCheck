@@ -30,30 +30,27 @@ let ``Different seed produces random elements`` size (seeds : Generator<int>) co
     actual
     |> Seq.distinct
     |> Seq.length
-    >! count / 3
+    >! 1
 
 [<Theory; AutoData>]
-let ``Choose produces elements in range`` (seeds : Generator<int>) (size : int) =
+let ``Choose produces elements in range`` (seeds : Generator<int>) (size : int) count =
     let upper =  size |> Math.Abs
     let lower = -size
     let g = Gen.choose (lower, upper)
     let seed i = seeds |> Seq.item i
 
     let actual =
-        [ for i in 1..9 -> Gen.generate size (seed i) g ]
+        [ for i in 1..count -> Gen.generate size (seed i) g ]
 
     test <@ actual |> Seq.exists (fun item -> item >= lower || item <= upper) @>
     test <@ actual |> Seq.filter (fun item -> item  < lower || item  > upper) |> Seq.isEmpty @>
 
 [<Theory; AutoData>]
-let ``Sized passes the current size`` (seeds : Generator<int>) (size : int) =
+let ``Sized passes the current size`` seed (size : int) =
     let g = Gen.sized (fun s -> Gen.choose (-s, s))
-    let seed i = seeds |> Seq.item i
 
-    let actual =
-        [ for i in 1..9 -> Gen.generate size (seed i) g ]
+    let actual = Gen.generate size seed g
 
     let upper =  size |> Math.Abs
     let lower = -size
-    test <@ actual |> Seq.exists (fun item -> item >= lower || item <= upper) @>
-    test <@ actual |> Seq.filter (fun item -> item  < lower || item  > upper) |> Seq.isEmpty @>
+    test <@ actual >= lower && actual <= upper @>
