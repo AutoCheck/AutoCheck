@@ -44,3 +44,16 @@ let ``Choose produces elements in range`` (seeds : Generator<int>) (size : int) 
 
     test <@ actual |> Seq.exists (fun item -> item >= lower || item <= upper) @>
     test <@ actual |> Seq.filter (fun item -> item  < lower || item  > upper) |> Seq.isEmpty @>
+
+[<Theory; AutoData>]
+let ``Sized passes the current size`` (seeds : Generator<int>) (size : int) =
+    let g = Gen.sized (fun s -> Gen.choose (-s, s))
+    let seed i = seeds |> Seq.item i
+
+    let actual =
+        [ for i in 1..9 -> Gen.generate size (seed i) g ]
+
+    let upper =  size |> Math.Abs
+    let lower = -size
+    test <@ actual |> Seq.exists (fun item -> item >= lower || item <= upper) @>
+    test <@ actual |> Seq.filter (fun item -> item  < lower || item  > upper) |> Seq.isEmpty @>
