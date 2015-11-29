@@ -43,7 +43,9 @@ let ``Choose produces elements in range`` (seeds : Generator<int>) (size : int) 
         [ for i in 1..count -> Gen.generate size (seed i) g ]
 
     test <@ actual |> Seq.exists (fun item -> item >= lower || item <= upper) @>
-    test <@ actual |> Seq.filter (fun item -> item  < lower || item  > upper) |> Seq.isEmpty @>
+    test <@ actual
+            |> Seq.filter (fun item -> item < lower || item > upper)
+            |> Seq.isEmpty @>
 
 [<Theory; AutoData>]
 let ``Sized passes the current size`` seed (size : int) =
@@ -56,19 +58,22 @@ let ``Sized passes the current size`` seed (size : int) =
     test <@ actual >= lower && actual <= upper @>
 
 [<Theory; AutoData>]
-let ``Elements generates one of the given values`` (xs : int[]) (seeds : Generator<int>) size =
+let ``Elements generates one of the given values`` (xs : int []) (seeds : Generator<int>) size =
     let g = Gen.elements xs
     let seed i = seeds |> Seq.item i
 
     let actual =
         [ for i in 1..30 -> Gen.generate size (seed i) g ]
 
-    test <@ xs |> Seq.except actual |> Seq.isEmpty @>
+    test <@ xs
+            |> Seq.except actual
+            |> Seq.isEmpty @>
 
 [<Theory; AutoData>]
 let ``Resize overrides the size parameter`` (newSize : int) size seed =
     newSize <>! size
     let g = Gen.sized Gen.init |> Gen.resize newSize
+
     let actual = g |> Gen.generate size seed
 
     newSize =! actual
