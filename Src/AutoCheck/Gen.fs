@@ -23,6 +23,22 @@ let sized g =
 /// <param name="n">The size that's going to override the runtime-size.</param>
 let resize n (Gen m) = Gen(fun _ r -> m n r)
 
+/// <summary>
+/// Promotes a monadic generator to a generator of monadic values.
+/// </summary>
+/// <param name="f">The monadic generator </param>
+/// <remarks>
+/// This is an unsafe combinator for the Gen type. Gen is only morally a monad:
+/// two generators that are supposed to be equal will give the same probability
+/// distribution, but they might be different as functions from random number
+/// seeds to values. QuickCheck, and so AutoCheck, maintains the illusion that
+/// a Gen is a probability distribution and does not allow you to distinguish
+/// two generators that have the same distribution.
+/// The promote function allows you to break this illusion by reusing the same
+/// random number seed twice. This is unsafe because by applying the same seed
+/// to two morally equal generators, you can see whether they are really equal
+/// or not.
+/// </remarks>
 let promote f =
     Gen(fun n r a ->
         let (Gen m) = f a
