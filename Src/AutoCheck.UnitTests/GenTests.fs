@@ -64,3 +64,11 @@ let ``Elements generates one of the given values`` (xs : int[]) (seeds : Generat
         [ for i in 1..30 -> Gen.generate size (seed i) g ]
 
     test <@ xs |> Seq.except actual |> Seq.isEmpty @>
+
+[<Theory; AutoData>]
+let ``Resize overrides the size parameter`` (newSize : int) size seed =
+    newSize <>! size
+    let g = Gen.sized Gen.init |> Gen.resize newSize
+    let actual = g |> Gen.generate size seed
+
+    newSize =! actual
