@@ -141,6 +141,15 @@ let oneof gens =
     let join x = bind x id
     join (elements gens)
 
+/// <summary>
+/// Chooses one of the given generators, with a weighted random distribution.
+/// </summary>
+/// <param name="gens">The input list of tuples, in form of a weighted random
+/// distribution per generator.
+/// </param>
+/// <remarks>
+/// The input list must be non-empty.
+/// </remarks>
 let frequency xs =
     let upperBound = List.sumBy fst xs
     let rec pick n =
