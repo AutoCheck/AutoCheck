@@ -119,9 +119,12 @@ let choose (lower, upper) =
     Gen (fun n r -> r) |> map (Random.range (lower, upper) >> fst)
 
 /// <summary>
-/// Generates one of the given values. The input list must be non-empty.
+/// Generates one of the given values.
 /// </summary>
 /// <param name="xs">The input list.</param>
+/// <remarks>
+/// The input list must be non-empty.
+/// </remarks>
 let elements xs =
     // http://stackoverflow.com/a/1817654/467754
     let flip f x y = f y x
