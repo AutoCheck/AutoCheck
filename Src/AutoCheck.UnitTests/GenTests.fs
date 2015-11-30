@@ -77,3 +77,23 @@ let ``Resize overrides the size parameter`` (newSize : int) size seed =
     let actual = g |> Gen.generate size seed
 
     newSize =! actual
+
+[<Theory; AutoData>]
+let ``Oneof randomly uses one of the given generators`` size (seeds : Generator<int>) =
+    let seed i = seeds |> Seq.item i
+    let g1 = Gen.init 1
+    let g2 = Gen.init 2
+    let g3 = Gen.init 3
+
+    let actual =
+        [ for i in 1..9 ->
+            Gen.oneof [ g1; g2; g3 ] |> Gen.generate size (seed i) ]
+
+    let unexpected =
+        seq {
+            yield [ 1; 1; 1; 1; 1; 1; 1; 1; 1 ]
+            yield [ 2; 2; 2; 2; 2; 2; 2; 2; 2 ]
+            yield [ 3; 3; 3; 3; 3; 3; 3; 3; 3 ]
+        }
+    test <@ unexpected
+            |> Seq.forall (fun u -> u.Length = actual.Length && u <> actual) @>
