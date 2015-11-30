@@ -127,6 +127,13 @@ let elements xs =
     let flip f x y = f y x
     choose (0, (Seq.length xs) - 1) |> map (flip Seq.item xs)
 
+/// <summary>
+/// Randomly uses one of the given generators.
+/// </summary>
+/// <param name="gens">The input list of generators to use.</param>
+/// <remarks>
+/// The input list must be non-empty.
+/// </remarks>
 let oneof gens =
     let join x = bind x id
     join (elements gens)
