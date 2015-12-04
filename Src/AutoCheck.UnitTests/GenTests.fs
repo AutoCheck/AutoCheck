@@ -120,7 +120,7 @@ let ``Frequency chooses one of the given generators`` size (seeds : Generator<in
 [<Theory; AutoData>]
 let ``Variant modifies a generator using an integer seed`` size seed =
     let original = Gen.sized (fun s -> Gen.choose (-s, s))
-    let modified = original |> Gen.variant seed
+    let modified = original |> Gen.variant (int DateTime.UtcNow.Ticks)
 
     let actual = modified |> Gen.generate size seed
 
@@ -128,7 +128,7 @@ let ``Variant modifies a generator using an integer seed`` size seed =
     unexpected <>! actual
 
 [<Theory; AutoData>]
-let ``Two takes a Gen of 'a and returns a Gen of 'a tuple`` expected size seed =
+let ``Two takes a Gen and returns a Gen of tuple`` (expected : int) size seed =
     let g = Gen.two (Gen.init expected)
     let actual = g |> Gen.generate size seed
     (expected, expected) =! actual
