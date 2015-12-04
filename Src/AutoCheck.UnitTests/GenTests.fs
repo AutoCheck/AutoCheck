@@ -116,3 +116,13 @@ let ``Frequency chooses one of the given generators`` size (seeds : Generator<in
     let g2s = actual |> List.item 1 |> snd
     let g3s = actual |> List.item 2 |> snd
     test <@ g1s < g2s && g2s < g3s @>
+
+[<Theory; AutoData>]
+let ``Variant modifies a generator using an integer seed`` size seed =
+    let original = Gen.sized (fun s -> Gen.choose (-s, s))
+    let modified = original |> Gen.variant seed
+
+    let actual = modified |> Gen.generate size seed
+
+    let unexpected = original |> Gen.generate size seed
+    unexpected <>! actual
