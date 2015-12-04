@@ -164,10 +164,6 @@ let frequency xs =
     gen { let! rand = choose (1, upperBound)
           return! pick rand xs }
 
-/// <summary>
-/// Takes a Gen of 'a and returns a Gen of 'a tuple.
-/// </summary>
-/// <param name="g">A Gen of 'a.</param>
 let two   g = map2 (fun a b     -> a, b)       g g
 let three g = map3 (fun a b c   -> a, b, c)    g g g
 let four  g = map4 (fun a b c d -> a, b, c, d) g g g g
