@@ -132,3 +132,9 @@ let ``Two takes a Gen and returns a Gen of tuple`` (expected : int) size seed =
     let g = Gen.two (Gen.init expected)
     let actual = g |> Gen.generate size seed
     (expected, expected) =! actual
+
+[<Theory; AutoData>]
+let ``Three takes a Gen and returns a Gen of triple`` (expected : int) size seed =
+    let g = Gen.three (Gen.init expected)
+    let actual = g |> Gen.generate size seed
+    (expected, expected, expected) =! actual
