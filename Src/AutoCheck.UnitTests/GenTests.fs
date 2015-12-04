@@ -126,3 +126,9 @@ let ``Variant modifies a generator using an integer seed`` size seed =
 
     let unexpected = original |> Gen.generate size seed
     unexpected <>! actual
+
+[<Theory; AutoData>]
+let ``Two takes a Gen of 'a and returns a Gen of 'a tuple`` expected size seed =
+    let g = Gen.two (Gen.init expected)
+    let actual = g |> Gen.generate size seed
+    (expected, expected) =! actual
