@@ -97,3 +97,22 @@ let ``Oneof randomly uses one of the given generators`` size (seeds : Generator<
         }
     test <@ unexpected
             |> Seq.forall (fun u -> u.Length = actual.Length && u <> actual) @>
+
+[<Theory; AutoData>]
+let ``Frequency chooses one of the given generators`` size (seeds : Generator<int>) =
+    let seed i = seeds |> Seq.item i
+    let g1 = Gen.init "a"
+    let g2 = Gen.init "b"
+    let g3 = Gen.init "c"
+
+    let actual =
+        let gn = Gen.frequency [ (1, g1); (2, g2); (3, g3) ]
+        [ for i in 1..100 -> Gen.generate size (seed i) gn ]
+        |> Seq.countBy id
+        |> Seq.sortBy id
+        |> Seq.toList
+
+    let g1s = actual |> List.item 0 |> snd
+    let g2s = actual |> List.item 1 |> snd
+    let g3s = actual |> List.item 2 |> snd
+    test <@ g1s < g2s && g2s < g3s @>
