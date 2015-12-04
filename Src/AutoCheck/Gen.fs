@@ -44,6 +44,10 @@ let promote f =
         let (Gen m) = f a
         m n r)
 
+/// <summary>
+/// Modifies a generator using an integer seed.
+/// </summary>
+/// <param name="v">The integer seed.</param>
 let variant v (Gen m) =
     let rec rands r n =
         match n with
