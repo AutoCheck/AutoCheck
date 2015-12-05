@@ -20,7 +20,9 @@ let ``Same seed produces same elements`` size count seed =
     =! 1
 
 [<Theory; AutoData>]
-let ``Different seed produces random elements`` size (seeds : Generator<int>) count =
+let ``Different seed produces random elements``
+    size (seeds : Generator<int>) count =
+
     let g = Gen.choose (-size, size)
     let seed i = seeds |> Seq.item i
 
@@ -33,7 +35,9 @@ let ``Different seed produces random elements`` size (seeds : Generator<int>) co
     >! 1
 
 [<Theory; AutoData>]
-let ``Choose produces elements in range`` (seeds : Generator<int>) (size : int) count =
+let ``Choose produces elements in range``
+    (seeds : Generator<int>) (size : int) count =
+
     let upper =  size |> Math.Abs
     let lower = -size
     let g = Gen.choose (lower, upper)
@@ -58,7 +62,9 @@ let ``Sized passes the current size`` seed (size : int) =
     test <@ actual >= lower && actual <= upper @>
 
 [<Theory; AutoData>]
-let ``Elements generates one of the given values`` (xs : int []) (seeds : Generator<int>) size =
+let ``Elements generates one of the given values``
+    (xs : int []) (seeds : Generator<int>) size =
+
     let g = Gen.elements xs
     let seed i = seeds |> Seq.item i
 
@@ -79,7 +85,9 @@ let ``Resize overrides the size parameter`` (newSize : int) size seed =
     newSize =! actual
 
 [<Theory; AutoData>]
-let ``Oneof randomly uses one of the given generators`` size (seeds : Generator<int>) =
+let ``Oneof randomly uses one of the given generators``
+    size (seeds : Generator<int>) =
+
     let seed i = seeds |> Seq.item i
     let g1 = Gen.init 1
     let g2 = Gen.init 2
@@ -99,7 +107,9 @@ let ``Oneof randomly uses one of the given generators`` size (seeds : Generator<
             |> Seq.forall (fun u -> u.Length = actual.Length && u <> actual) @>
 
 [<Theory; AutoData>]
-let ``Frequency chooses one of the given generators`` size (seeds : Generator<int>) =
+let ``Frequency chooses one of the given generators``
+    size (seeds : Generator<int>) =
+
     let seed i = seeds |> Seq.item i
     let g1 = Gen.init "a"
     let g2 = Gen.init "b"
@@ -128,19 +138,25 @@ let ``Variant modifies a generator using an integer seed`` size seed =
     unexpected <>! actual
 
 [<Theory; AutoData>]
-let ``Two takes a Gen and returns a Gen of tuple`` (expected : int) size seed =
+let ``Two takes a Gen and returns a Gen of tuple``
+    (expected : int) size seed =
+
     let g = Gen.two (Gen.init expected)
     let actual = g |> Gen.generate size seed
     (expected, expected) =! actual
 
 [<Theory; AutoData>]
-let ``Three takes a Gen and returns a Gen of triple`` (expected : int) size seed =
+let ``Three takes a Gen and returns a Gen of triple``
+    (expected : int) size seed =
+
     let g = Gen.three (Gen.init expected)
     let actual = g |> Gen.generate size seed
     (expected, expected, expected) =! actual
 
 [<Theory; AutoData>]
-let ``Four takes a Gen and returns a Gen of quaple`` (expected : int) size seed =
+let ``Four takes a Gen and returns a Gen of quaple``
+    (expected : int) size seed =
+
     let g = Gen.four (Gen.init expected)
     let actual = g |> Gen.generate size seed
     (expected, expected, expected, expected) =! actual
