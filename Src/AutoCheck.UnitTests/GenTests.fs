@@ -160,3 +160,14 @@ let ``Four takes a Gen and returns a Gen of quaple``
     let g = Gen.four (Gen.init expected)
     let actual = g |> Gen.generate size seed
     (expected, expected, expected, expected) =! actual
+
+open AutoCheck.Gen
+
+[<Theory; AutoData>]
+let ``Return in gen workflow returns correct result`` size seed (s : string) =
+    let run g = Gen.generate size seed g
+
+    let actual = gen { return s } |> run
+
+    let expected = Gen.init s |> run
+    expected =! actual
