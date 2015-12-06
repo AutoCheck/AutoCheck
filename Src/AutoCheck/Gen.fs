@@ -70,13 +70,13 @@ let generate n seed (Gen m) =
     let (size, rand') = Random.range (0, n) rand
     m size rand'
 
-let init a = Gen(fun n r -> a)
-
 let bind (Gen m) f =
     Gen(fun n r0 ->
         let r1, r2 = Random.split r0
         let (Gen m') = f (m n r1)
         m' n r2)
+
+let init a = Gen(fun n r -> a)
 
 let apply f m =
     bind f (fun f' ->
@@ -92,6 +92,11 @@ let apply f m =
 let map f m =
     bind m (fun m' ->
         init (f m'))
+
+module Operators =
+    let (>>=) m f = bind m f
+    let (<*>) f m = apply f m
+    let (<!>) f m = map f m
 
 /// <summary>
 /// Returns a new generator obtained by applying a function to two existing
@@ -126,19 +131,9 @@ let lift3 f m1 m2 m3 =
 let lift4 f m1 m2 m3 m4 =
     apply (apply (apply (apply (init f) m1) m2) m3) m4
 
-module Operators =
-    let (>>=) m f = bind m f
-    let (<*>) f m = apply f m
-    let (<!>) f m = map f m
-
-[<AutoOpen>]
-module Builder =
-    type GenBuilder() =
-        member this.Bind       (m1, m2) = bind m1 m2
-        member this.Return     (x)      = init x
-        member this.ReturnFrom (f)      = f
-
-    let gen = GenBuilder()
+let two   g = lift2 (fun a b     -> a, b)       g g
+let three g = lift3 (fun a b c   -> a, b, c)    g g g
+let four  g = lift4 (fun a b c d -> a, b, c, d) g g g g
 
 /// <summary>
 /// Generates a random element in the given inclusive range, uniformly distrib-
@@ -172,6 +167,15 @@ let oneof gens =
     let join x = bind x id
     join (elements gens)
 
+[<AutoOpen>]
+module Builder =
+    type GenBuilder() =
+        member this.Bind       (m1, m2) = bind m1 m2
+        member this.Return     (x)      = init x
+        member this.ReturnFrom (f)      = f
+
+    let gen = GenBuilder()
+
 /// <summary>
 /// Chooses one of the given generators, with a weighted random distribution.
 /// </summary>
@@ -191,6 +195,3 @@ let frequency xs =
     gen { let! rand = choose (1, upperBound)
           return! pick rand xs }
 
-let two   g = lift2 (fun a b     -> a, b)       g g
-let three g = lift3 (fun a b c   -> a, b, c)    g g g
-let four  g = lift4 (fun a b c d -> a, b, c, d) g g g g
