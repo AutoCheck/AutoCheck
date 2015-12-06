@@ -100,7 +100,7 @@ let map f m =
 /// <param name="f">The function to apply to the existing generators.</param>
 /// <param name="m1">The existing generator.</param>
 /// <param name="m2">The existing generator.</param>
-let map2 f m1 m2 =
+let lift2 f m1 m2 =
     apply (apply (init f) m1) m2
 
 /// <summary>
@@ -111,7 +111,7 @@ let map2 f m1 m2 =
 /// <param name="m1">The existing generator.</param>
 /// <param name="m2">The existing generator.</param>
 /// <param name="m3">The existing generator.</param>
-let map3 f m1 m2 m3 =
+let lift3 f m1 m2 m3 =
     apply (apply (apply (init f) m1) m2) m3
 
 /// <summary>
@@ -123,7 +123,7 @@ let map3 f m1 m2 m3 =
 /// <param name="m2">The existing generator.</param>
 /// <param name="m3">The existing generator.</param>
 /// <param name="m4">The existing generator.</param>
-let map4 f m1 m2 m3 m4 =
+let lift4 f m1 m2 m3 m4 =
     apply (apply (apply (apply (init f) m1) m2) m3) m4
 
 module Operators =
@@ -191,6 +191,6 @@ let frequency xs =
     gen { let! rand = choose (1, upperBound)
           return! pick rand xs }
 
-let two   g = map2 (fun a b     -> a, b)       g g
-let three g = map3 (fun a b c   -> a, b, c)    g g g
-let four  g = map4 (fun a b c d -> a, b, c, d) g g g g
+let two   g = lift2 (fun a b     -> a, b)       g g
+let three g = lift3 (fun a b c   -> a, b, c)    g g g
+let four  g = lift4 (fun a b c d -> a, b, c, d) g g g g
