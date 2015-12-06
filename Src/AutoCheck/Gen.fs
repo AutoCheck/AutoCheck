@@ -83,16 +83,46 @@ let apply f m =
         bind m (fun m' ->
             init (f' m')))
 
+/// <summary>
+/// Returns a new generator obtained by applying a function to an existing
+/// generator.
+/// </summary>
+/// <param name="f">The function to apply to an existing generator.</param>
+/// <param name="m">The existing generator.</param>
 let map f m =
     bind m (fun m' ->
         init (f m'))
 
+/// <summary>
+/// Returns a new generator obtained by applying a function to two existing
+/// generators.
+/// </summary>
+/// <param name="f">The function to apply to the existing generators.</param>
+/// <param name="m1">The existing generator.</param>
+/// <param name="m2">The existing generator.</param>
 let map2 f m1 m2 =
     apply (apply (init f) m1) m2
 
+/// <summary>
+/// Returns a new generator obtained by applying a function to three existing
+/// generators.
+/// </summary>
+/// <param name="f">The function to apply to the existing generators.</param>
+/// <param name="m1">The existing generator.</param>
+/// <param name="m2">The existing generator.</param>
+/// <param name="m3">The existing generator.</param>
 let map3 f m1 m2 m3 =
     apply (apply (apply (init f) m1) m2) m3
 
+/// <summary>
+/// Returns a new generator obtained by applying a function to four existing
+/// generators.
+/// </summary>
+/// <param name="f">The function to apply to the existing generators.</param>
+/// <param name="m1">The existing generator.</param>
+/// <param name="m2">The existing generator.</param>
+/// <param name="m3">The existing generator.</param>
+/// <param name="m4">The existing generator.</param>
 let map4 f m1 m2 m3 m4 =
     apply (apply (apply (apply (init f) m1) m2) m3) m4
 
