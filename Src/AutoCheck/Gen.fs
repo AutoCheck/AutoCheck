@@ -70,6 +70,13 @@ let generate n seed (Gen m) =
     let (size, rand') = Random.range (0, n) rand
     m size rand'
 
+/// <summary>
+/// Sequentially compose two actions, passing any value produced by the first
+/// as an argument to the second.
+/// </summary>
+/// <param name="f">
+/// The action that produces a value to be passed as argument to the generator.
+/// </param>
 let bind (Gen m) f =
     Gen(fun n r0 ->
         let r1, r2 = Random.split r0
