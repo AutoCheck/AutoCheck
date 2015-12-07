@@ -220,4 +220,9 @@ let frequency xs =
     gen { let! rand = choose (1, upperBound)
           return! pick rand xs }
 
+/// <summary>
+/// Adjust the size parameter, by transforming it with the given function.
+/// </summary>
+/// <param name="f">The function to transform the size parameter.</param>
+/// <param name="g">The generator to apply the scaling.</param>
 let scale f g = sized (fun n -> resize (f n) g)
