@@ -89,6 +89,12 @@ let bind (Gen m) f =
 /// <param name="a">The value to inject into a generator.</param>
 let init a = Gen(fun n r -> a)
 
+/// <summary>
+/// Unpacks a function wrapped inside a generator, applying it into a new
+/// generator.
+/// </summary>
+/// <param name="f">The function wrapped inside a generator.</param>
+/// <param name="m">The generator, to apply the function to.</param>
 let apply f m =
     bind f (fun f' ->
         bind m (fun m' ->
