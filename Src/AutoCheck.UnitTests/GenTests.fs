@@ -13,7 +13,7 @@ let ``Same seed produces same elements`` size count seed =
     let g = Gen.choose (-size, size)
 
     let actual =
-        [ for i in 1..count -> Gen.generate size seed g ]
+        [ for i in 1..count -> Gen.generate seed g ]
 
     actual
     |> Seq.distinct
@@ -24,11 +24,11 @@ let ``Same seed produces same elements`` size count seed =
 let ``Different seed produces random elements``
     size (seeds : Generator<int>) count =
 
-    let g = Gen.choose (-size, size)
+    let g = Gen.choose (-size, size) |> Gen.resize size
     let seed i = seeds |> Seq.item i
 
     let actual =
-        [ for i in 1..count -> Gen.generate size (seed i) g ]
+        [ for i in 1..count -> Gen.generate (seed i) g ]
 
     actual
     |> Seq.distinct
@@ -41,11 +41,11 @@ let ``Choose produces elements in range``
 
     let upper =  size |> Math.Abs
     let lower = -size
-    let g = Gen.choose (lower, upper)
+    let g = Gen.choose (lower, upper) |> Gen.resize size
     let seed i = seeds |> Seq.item i
 
     let actual =
-        [ for i in 1..count -> Gen.generate size (seed i) g ]
+        [ for i in 1..count -> Gen.generate (seed i) g ]
 
     test <@ actual |> Seq.exists (fun item -> item >= lower || item <= upper) @>
     test <@ actual
@@ -56,7 +56,7 @@ let ``Choose produces elements in range``
 let ``Sized passes the current size`` seed (size : int) =
     let g = Gen.sized (fun s -> Gen.choose (-s, s))
 
-    let actual = Gen.generate size seed g
+    let actual = Gen.generate seed g
 
     let upper =  size |> Math.Abs
     let lower = -size
@@ -64,13 +64,13 @@ let ``Sized passes the current size`` seed (size : int) =
 
 [<Theory; AutoData>]
 let ``Elements generates one of the given values``
-    (xs : int []) (seeds : Generator<int>) size =
+    (xs : int []) (seeds : Generator<int>) =
 
     let g = Gen.elements xs
     let seed i = seeds |> Seq.item i
 
     let actual =
-        [ for i in 1..30 -> Gen.generate size (seed i) g ]
+        [ for i in 1..30 -> Gen.generate (seed i) g ]
 
     test <@ xs
             |> Seq.except actual
@@ -81,13 +81,13 @@ let ``Resize overrides the size parameter`` (newSize : int) size seed =
     newSize <>! size
     let g = Gen.sized Gen.init |> Gen.resize newSize
 
-    let actual = g |> Gen.generate size seed
+    let actual = g |> Gen.generate seed
 
     newSize =! actual
 
 [<Theory; AutoData>]
 let ``Oneof randomly uses one of the given generators``
-    size (seeds : Generator<int>) =
+    (seeds : Generator<int>) =
 
     let seed i = seeds |> Seq.item i
     let g1 = Gen.init 1
@@ -96,7 +96,7 @@ let ``Oneof randomly uses one of the given generators``
 
     let actual =
         [ for i in 1..9 ->
-            Gen.oneof [ g1; g2; g3 ] |> Gen.generate size (seed i) ]
+            Gen.oneof [ g1; g2; g3 ] |> Gen.generate (seed i) ]
 
     let unexpected =
         seq {
@@ -109,7 +109,7 @@ let ``Oneof randomly uses one of the given generators``
 
 [<Theory; AutoData>]
 let ``Frequency chooses one of the given generators``
-    size (seeds : Generator<int>) =
+    (seeds : Generator<int>) =
 
     let seed i = seeds |> Seq.item i
     let g1 = Gen.init "a"
@@ -118,7 +118,7 @@ let ``Frequency chooses one of the given generators``
 
     let actual =
         let gn = Gen.frequency [ (1, g1); (2, g2); (3, g3) ]
-        [ for i in 1..100 -> Gen.generate size (seed i) gn ]
+        [ for i in 1..100 -> Gen.generate (seed i) gn ]
         |> Seq.countBy id
         |> Seq.sortBy id
         |> Seq.toList
@@ -129,8 +129,8 @@ let ``Frequency chooses one of the given generators``
     test <@ g1s < g2s && g2s < g3s @>
 
 [<Theory; AutoData>]
-let ``Return in gen workflow returns correct result`` size seed (s : string) =
-    let run g = Gen.generate size seed g
+let ``Return in gen workflow returns correct result`` seed (s : string) =
+    let run g = Gen.generate seed g
 
     let actual = gen { return s } |> run
 
@@ -138,44 +138,44 @@ let ``Return in gen workflow returns correct result`` size seed (s : string) =
     expected =! actual
 
 [<Theory; AutoData>]
-let ``Variant modifies a generator using an integer seed`` size seed =
+let ``Variant modifies a generator using an integer seed`` seed =
     let original = Gen.sized (fun s -> Gen.choose (-s, s))
     let modified = original |> Gen.variant (int DateTime.UtcNow.Ticks)
 
-    let actual = modified |> Gen.generate size seed
+    let actual = modified |> Gen.generate seed
 
-    let unexpected = original |> Gen.generate size seed
+    let unexpected = original |> Gen.generate seed
     unexpected <>! actual
 
 [<Theory; AutoData>]
 let ``Two takes a Gen and returns a Gen of tuple``
-    (expected : int) size seed =
+    (expected : int) seed =
 
     let g = Gen.two (Gen.init expected)
-    let actual = g |> Gen.generate size seed
+    let actual = g |> Gen.generate seed
     (expected, expected) =! actual
 
 [<Theory; AutoData>]
 let ``Three takes a Gen and returns a Gen of triple``
-    (expected : int) size seed =
+    (expected : int) seed =
 
     let g = Gen.three (Gen.init expected)
-    let actual = g |> Gen.generate size seed
+    let actual = g |> Gen.generate seed
     (expected, expected, expected) =! actual
 
 [<Theory; AutoData>]
 let ``Four takes a Gen and returns a Gen of quaple``
-    (expected : int) size seed =
+    (expected : int) seed =
 
     let g = Gen.four (Gen.init expected)
-    let actual = g |> Gen.generate size seed
+    let actual = g |> Gen.generate seed
     (expected, expected, expected, expected) =! actual
 
 [<Theory; AutoData>]
 let ``Both map and lift are synonyms``
-    size seed (dummy : int) (result : int) =
+    seed (dummy : int) (result : int) =
 
-    let run g = Gen.generate size seed g
+    let run g = Gen.generate seed g
     let g = Gen.init dummy
     let f = fun _ -> result
 
@@ -183,7 +183,7 @@ let ``Both map and lift are synonyms``
 
 [<Theory; AutoData>]
 let ``Scale adjusts the size parameter correctly`` size seed =
-    let run g = Gen.generate size seed g
+    let run g = Gen.generate seed g
 
     let actual =
         Gen.init

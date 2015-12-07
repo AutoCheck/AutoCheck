@@ -60,14 +60,14 @@ let variant v (Gen m) =
     Gen(fun n r -> m n (rands r v))
 
 /// <summary>
-/// Runs a generator, in order to produce a random element.
+/// Run a generator. The size passed to the generator is always 30; if you want
+/// another size then you should explicitly use 'resize'.
 /// </summary>
-/// <param name="n">The size to be passed to the generator.</param>
 /// <param name="seed">The seed, in order to get different results on each run.
 /// </param>
-let generate n seed (Gen m) =
+let generate seed (Gen m) =
     let rand = Random.create seed
-    let (size, rand') = Random.range (0, n) rand
+    let (size, rand') = Random.range (0, 30) rand
     m size rand'
 
 /// <summary>
