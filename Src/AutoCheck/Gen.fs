@@ -76,6 +76,10 @@ let bind (Gen m) f =
         let (Gen m') = f (m n r1)
         m' n r2)
 
+/// <summary>
+/// Injects a value into a generator.
+/// </summary>
+/// <param name="a">The value to inject into a generator.</param>
 let init a = Gen(fun n r -> a)
 
 let apply f m =
