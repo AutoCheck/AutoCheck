@@ -161,6 +161,16 @@ let ``Four takes a Gen and returns a Gen of quaple``
     let actual = g |> Gen.generate size seed
     (expected, expected, expected, expected) =! actual
 
+[<Theory; AutoData>]
+let ``Both map and lift are synonyms``
+    size seed (dummy : int) (result : int) =
+
+    let run g = Gen.generate size seed g
+    let g = Gen.init dummy
+    let f = fun _ -> result
+
+    (Gen.map f g |> run) =! (Gen.lift f g |> run)
+
 open AutoCheck.Gen
 
 [<Theory; AutoData>]

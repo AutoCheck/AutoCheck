@@ -99,6 +99,14 @@ module Operators =
     let (<!>) f m = map f m
 
 /// <summary>
+/// Returns a new generator obtained by applying a function to an existing
+/// generator. Synonym of map.
+/// </summary>
+/// <param name="f">The function to apply to an existing generator.</param>
+/// <param name="m">The existing generator.</param>
+let lift f m = map f m
+
+/// <summary>
 /// Returns a new generator obtained by applying a function to two existing
 /// generators.
 /// </summary>
