@@ -226,3 +226,8 @@ let frequency xs =
 /// <param name="f">The function to transform the size parameter.</param>
 /// <param name="g">The generator to apply the scaling.</param>
 let scale f g = sized (fun n -> resize (f n) g)
+
+let sample seed g =
+    seq {
+        for n in [ 0..2..20 ] -> resize n g |> generate seed
+    }
