@@ -171,6 +171,19 @@ let ``Both map and lift are synonyms``
 
     (Gen.map f g |> run) =! (Gen.lift f g |> run)
 
+[<Theory; AutoData>]
+let ``Scale adjusts the size parameter correctly`` size seed =
+    let run g = Gen.generate size seed g
+
+    let actual =
+        Gen.init
+        |> Gen.sized
+        |> Gen.scale (fun s -> s * 2)
+        |> Gen.resize size
+        |> run
+
+    (size * 2) =! actual
+
 open AutoCheck.Gen
 
 [<Theory; AutoData>]
