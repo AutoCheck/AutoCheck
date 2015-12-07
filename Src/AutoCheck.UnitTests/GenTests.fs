@@ -4,6 +4,7 @@ open Xunit.Extensions
 open Ploeh.AutoFixture.Xunit
 open Ploeh.AutoFixture
 open Swensen.Unquote
+open AutoCheck.Gen
 open AutoCheck
 open System
 
@@ -128,6 +129,15 @@ let ``Frequency chooses one of the given generators``
     test <@ g1s < g2s && g2s < g3s @>
 
 [<Theory; AutoData>]
+let ``Return in gen workflow returns correct result`` size seed (s : string) =
+    let run g = Gen.generate size seed g
+
+    let actual = gen { return s } |> run
+
+    let expected = Gen.init s |> run
+    expected =! actual
+
+[<Theory; AutoData>]
 let ``Variant modifies a generator using an integer seed`` size seed =
     let original = Gen.sized (fun s -> Gen.choose (-s, s))
     let modified = original |> Gen.variant (int DateTime.UtcNow.Ticks)
@@ -183,14 +193,3 @@ let ``Scale adjusts the size parameter correctly`` size seed =
         |> run
 
     (size * 2) =! actual
-
-open AutoCheck.Gen
-
-[<Theory; AutoData>]
-let ``Return in gen workflow returns correct result`` size seed (s : string) =
-    let run g = Gen.generate size seed g
-
-    let actual = gen { return s } |> run
-
-    let expected = Gen.init s |> run
-    expected =! actual
