@@ -131,11 +131,8 @@ let ``Frequency chooses one of the given generators``
 [<Theory; AutoData>]
 let ``Return in gen workflow returns correct result`` seed (s : string) =
     let run g = Gen.generate seed g
-
     let actual = gen { return s } |> run
-
-    let expected = Gen.init s |> run
-    expected =! actual
+    (Gen.init s |> run) =! actual
 
 [<Theory; AutoData>]
 let ``Variant modifies a generator using an integer seed`` seed =
