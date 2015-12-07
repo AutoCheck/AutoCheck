@@ -220,3 +220,4 @@ let frequency xs =
     gen { let! rand = choose (1, upperBound)
           return! pick rand xs }
 
+let scale f g = sized (fun n -> resize (f n) g)
