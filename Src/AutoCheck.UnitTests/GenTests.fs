@@ -190,3 +190,33 @@ let ``Scale adjusts the size parameter correctly`` size seed =
         |> run
 
     (size * 2) =! actual
+
+[<Theory; AutoData>]
+let ``Sample generates random values`` seed =
+    let g = Gen.sized Gen.init
+
+    let actual = g |> Gen.sample seed
+
+    let expected = Seq.length actual
+    expected =! (actual
+                 |> Seq.distinct
+                 |> Seq.length)
+
+[<Theory; AutoData>]
+let ``Sample with same seed generates same values`` seed =
+    let g = Gen.sized (fun size -> Gen.choose (-size, size))
+
+    let actual = g |> Gen.sample seed
+
+    let expected = g |> Gen.sample seed
+    expected =! actual
+
+[<Theory; AutoData>]
+let ``Sample with different seed generates different values`` seed1 seed2 =
+    seed1 <>! seed2
+    let g = Gen.sized (fun size -> Gen.choose (-size, size))
+
+    let actual = g |> Gen.sample seed1
+
+    let unexpected = g |> Gen.sample seed2
+    unexpected <>! actual

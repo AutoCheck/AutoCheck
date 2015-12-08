@@ -232,7 +232,4 @@ let scale f g = sized (fun n -> resize (f n) g)
 /// </summary>
 /// <param name="seed">The seed use each time the generator runs.</param>
 /// <param name="g">The generator to run for generating example values.</param>
-let sample seed g =
-    seq {
-        for n in [ 0..2..20 ] -> resize n g |> generate seed
-    }
+let sample seed g = [ for n in [ 0..2..20 ] -> resize n g |> generate seed ]
