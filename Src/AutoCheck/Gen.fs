@@ -233,3 +233,15 @@ let scale f g = sized (fun n -> resize (f n) g)
 /// <param name="seed">The seed use each time the generator runs.</param>
 /// <param name="g">The generator to run for generating example values.</param>
 let sample seed g = [ for n in [ 0..2..20 ] -> resize n g |> generate seed ]
+
+let suchThatOption g is =
+    let rec attempt k n =
+        gen {
+            match (k, n) with
+            | (_, 0) -> return None
+            | (k, n) ->
+                let! x = resize (2 * k + n) g
+                if x |> is then return Some x
+                else return! attempt (k + 1) (n - 1)
+        }
+    sized (max 1 >> attempt 0)
