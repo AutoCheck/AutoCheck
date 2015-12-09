@@ -222,7 +222,7 @@ let ``Sample with different seed generates different values`` seed1 seed2 =
     unexpected <>! actual
 
 [<Theory; AutoData>]
-let ``SuchThatOption does the trick for ya`` seed y =
+let ``SuchThatOption tries to gen a value that satisfies a predicate`` seed y =
     let run g = Gen.generate seed g
     let g = Gen.sized (fun size -> Gen.choose (-size, size))
 
