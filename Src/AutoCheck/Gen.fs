@@ -250,3 +250,11 @@ let suchThatOption is g =
                 else return! attempt (k + 1) (n - 1)
         }
     sized (max 1 >> attempt 0)
+
+let rec suchThat is g =
+    gen {
+        let!  option = g |> suchThatOption is
+        match option with
+        | Some x -> return x
+        | None   -> return! sized (fun s -> resize (s + 1) g |> suchThat is)
+    }
