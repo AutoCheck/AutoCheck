@@ -232,3 +232,15 @@ let ``SuchThatOption tries to gen a value that satisfies a predicate`` seed y =
         |> run
 
     test <@ Option.isSome actual @>
+
+[<Theory; AutoData>]
+let ``SuchThat generates a value that satisfies a predicate`` seed y =
+    let run g = Gen.generate seed g
+    let g = Gen.sized (fun size -> Gen.choose (-size, size))
+
+    let actual =
+        g
+        |> Gen.suchThat (fun x -> x < y)
+        |> run
+
+    test <@ (fun x -> x < y) actual @>
