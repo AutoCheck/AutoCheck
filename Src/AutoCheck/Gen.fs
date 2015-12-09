@@ -251,6 +251,11 @@ let suchThatOption is g =
         }
     sized (max 1 >> attempt 0)
 
+/// <summary>
+/// Generates a value that satisfies a predicate.
+/// </summary>
+/// <param name="is">The predicate satisfied by the value.</param>
+/// <param name="g">The generator to run for creating candidate values.</param>
 let rec suchThat is g =
     gen {
         let!  option = g |> suchThatOption is
