@@ -234,6 +234,11 @@ let scale f g = sized (fun n -> resize (f n) g)
 /// <param name="g">The generator to run for generating example values.</param>
 let sample seed g = [ for n in [ 0..2..20 ] -> resize n g |> generate seed ]
 
+/// <summary>
+/// Tries to generate a value that satisfies a predicate.
+/// </summary>
+/// <param name="is">The predicate satisfied by the value.</param>
+/// <param name="g">The generator to run for creating candidate values.</param>
 let suchThatOption is g =
     let rec attempt k n =
         gen {
