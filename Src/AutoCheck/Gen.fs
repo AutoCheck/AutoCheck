@@ -263,3 +263,10 @@ let rec suchThat is g =
         | Some x -> return x
         | None   -> return! sized (fun s -> resize (s + 1) g |> suchThat is)
     }
+
+let growingElements xs =
+    let l = Seq.length xs
+    sized (fun s ->
+        let s' = max 1 s
+        let n  = min l s'
+        elements (xs |> Seq.take n))
