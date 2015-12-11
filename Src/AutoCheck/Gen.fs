@@ -264,6 +264,12 @@ let rec suchThat is g =
         | None   -> return! sized (fun s -> resize (s + 1) g |> suchThat is)
     }
 
+/// <summary>
+/// Takes a list of elements of increasing size, and chooses among an initial
+/// segment of the list. The size of this initial segment increases, with the
+/// size parameter.
+/// </summary>
+/// <param name="xs">The input list of elements to choose from.</param>
 let growingElements xs =
     let l = Seq.length xs
     sized (fun s ->
