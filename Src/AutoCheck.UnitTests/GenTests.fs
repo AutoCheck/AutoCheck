@@ -244,3 +244,18 @@ let ``SuchThat generates a value that satisfies a predicate`` seed y =
         |> run
 
     test <@ (fun x -> x < y) actual @>
+
+[<Theory; AutoData>]
+let ``GrowingElements correctly chooses among the segments of the list`` seed =
+    let sizes = [ 1..10 ]
+    let run g =
+        [ for n in sizes ->
+              g
+              |> Gen.resize n
+              |> Gen.generate seed ]
+
+    let actual = Gen.growingElements sizes |> run
+
+    // sizes  [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+    // actual [1, 1, 3, 3, 4, 3, 6, 7, 3,  9]
+    test <@ List.forall2 (>=) sizes actual @>
