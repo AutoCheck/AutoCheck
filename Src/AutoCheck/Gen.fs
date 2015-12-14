@@ -278,6 +278,10 @@ let growingElements xs =
         let n  = min l s'
         elements (xs |> Seq.take n))
 
+/// <summary>
+/// Generates a random permutation of the given list.
+/// </summary>
+/// <param name="xs">The list to permute.</param>
 let rec shuffle xs =
     let pickOne xs = xs |> List.map (fun x -> x, xs |> List.except [ x ])
     gen {
