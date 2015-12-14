@@ -261,3 +261,28 @@ let ``GrowingElements correctly chooses among the segments of the list`` seed =
     // sizes  [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
     // actual [1, 1, 3, 3, 4, 3, 6, 7, 3,  9]
     test <@ List.forall2 (>=) sizes actual @>
+
+[<Theory; AutoData>]
+let ``Shuffle randomly permutes a given list`` (unsorted : int []) seed =
+    let sorted =
+        unsorted
+        |> Array.sort
+        |> Array.toList
+
+    let actual =
+        sorted
+        |> Gen.shuffle
+        |> Gen.generate seed
+
+    let unexpected = sorted
+    unexpected <>! actual
+
+[<Theory; AutoData>]
+let ``Shuffle returns an empty list when given an empty list`` seed =
+    let actual =
+        []
+        |> Gen.shuffle
+        |> Gen.generate seed
+
+    let expected = []
+    expected =! actual
