@@ -277,3 +277,14 @@ let growingElements xs =
         let s' = max 1 s
         let n  = min l s'
         elements (xs |> Seq.take n))
+
+let rec shuffle xs =
+    let pickOne xs = xs |> List.map (fun x -> x, xs |> List.except [ x ])
+    gen {
+        match xs with
+        | [ ] -> return List.empty
+        |  _  ->
+            let! (y, ys) = xs |> pickOne |> elements
+            let!     ys' = shuffle ys
+            return (y :: ys')
+    }
