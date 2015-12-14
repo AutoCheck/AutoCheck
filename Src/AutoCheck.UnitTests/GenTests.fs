@@ -135,13 +135,15 @@ let ``Return in gen workflow returns correct result`` seed (s : string) =
     (Gen.init s |> run) =! actual
 
 [<Theory; AutoData>]
-let ``Variant modifies a generator using an integer seed`` seed =
-    let original = Gen.sized (fun s -> Gen.choose (-s, s))
-    let modified = original |> Gen.variant (int DateTime.UtcNow.Ticks)
+let ``Variant modifies a generator using an integer seed`` seed other =
+    let g = Gen.choose (-256, 256)
 
-    let actual = modified |> Gen.generate seed
+    let actual =
+        g
+        |> Gen.variant other
+        |> Gen.generate seed
 
-    let unexpected = original |> Gen.generate seed
+    let unexpected = g |> Gen.generate seed
     unexpected <>! actual
 
 [<Theory; AutoData>]
