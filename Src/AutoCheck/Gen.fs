@@ -292,3 +292,18 @@ let rec shuffle xs =
             let!     ys' = shuffle ys
             return (y :: ys')
     }
+
+let filter is input =
+    let update x xs =
+        gen {
+            let! flg = is x
+            let! xs' = xs
+            return (if flg then x :: xs'
+                    else xs')
+        }
+    init [] |> List.foldBack update input
+
+let sublistOf xs =
+    filter (fun _ ->
+        oneof [ init true
+                init false ]) xs
