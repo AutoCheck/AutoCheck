@@ -293,6 +293,15 @@ let rec shuffle xs =
             return (y :: ys')
     }
 
+/// <summary>
+/// Returns a new collection containing only the elements of the collection for
+/// which the given predicate returns true when run as a generator.
+/// </summary>
+/// <param name="is">A function to test whether each item in the input sequence
+/// should be included in the output. The result of the function is known after
+/// is run as a generator.
+/// </param>
+/// <param name="input">The input sequence.</param>
 let filter is input =
     let update x xs =
         gen {
@@ -301,8 +310,12 @@ let filter is input =
             return (if flg then x :: xs'
                     else xs')
         }
-    init [] |> List.foldBack update input
+    init [] |> Seq.foldBack update input
 
+/// <summary>
+/// Generates a random subsequence of the given list.
+/// </summary>
+/// <param name="xs">The list to generate a random subsequence from.</param>
 let sublistOf xs =
     filter (fun _ ->
         oneof [ init true
