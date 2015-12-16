@@ -162,8 +162,8 @@ let three g = lift3 (fun a b c   -> a, b, c)    g g g
 let four  g = lift4 (fun a b c d -> a, b, c, d) g g g g
 
 /// <summary>
-/// Generates a random element in the given inclusive range, uniformly distrib-
-/// uted in the closed interval [lower,upper].
+/// Generates a random element in the given inclusive range, uniformly
+/// distributed in the closed interval [lower,upper].
 /// </summary>
 /// <param name="lower">The lower bound.</param>
 /// <param name="upper">The upper bound.</param>
