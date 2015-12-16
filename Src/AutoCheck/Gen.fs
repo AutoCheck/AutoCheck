@@ -189,7 +189,7 @@ let elements xs =
 /// <remarks>
 /// The input list must be non-empty.
 /// </remarks>
-let oneof gens =
+let oneOf gens =
     let join x = bind x id
     join (elements gens)
 
@@ -318,5 +318,5 @@ let filter is input =
 /// <param name="xs">The list to generate a random subsequence from.</param>
 let sublistOf xs =
     filter (fun _ ->
-        oneof [ init true
+        oneOf [ init true
                 init false ]) xs

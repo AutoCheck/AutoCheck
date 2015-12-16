@@ -86,7 +86,7 @@ let ``Resize overrides the size parameter`` (newSize : int) size seed =
     newSize =! actual
 
 [<Theory; AutoData>]
-let ``Oneof randomly uses one of the given generators``
+let ``OneOf randomly uses one of the given generators``
     (seeds : Generator<int>) =
 
     let seed i = seeds |> Seq.item i
@@ -96,7 +96,7 @@ let ``Oneof randomly uses one of the given generators``
 
     let actual =
         [ for i in 1..9 ->
-            Gen.oneof [ g1; g2; g3 ] |> Gen.generate (seed i) ]
+            Gen.oneOf [ g1; g2; g3 ] |> Gen.generate (seed i) ]
 
     let unexpected =
         seq {
