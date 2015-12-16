@@ -21,9 +21,7 @@ let ``Same seed produces same elements`` size count seed =
     =! 1
 
 [<Theory; AutoData>]
-let ``Different seed produces random elements``
-    size (seeds : Generator<int>) count =
-
+let ``Different seed produces random elements`` size (seeds : Generator<int>) count =
     let g = Gen.choose (-size, size) |> Gen.resize size
     let seed i = seeds |> Seq.item i
 
@@ -36,8 +34,7 @@ let ``Different seed produces random elements``
     >! 1
 
 [<Theory; AutoData>]
-let ``Choose produces elements in range``
-    (seeds : Generator<int>) (size : int) count =
+let ``Choose produces elements in range`` (seeds : Generator<int>) (size : int) count =
 
     let upper =  size |> Math.Abs
     let lower = -size
@@ -108,8 +105,7 @@ let ``OneOf randomly uses one of the given generators``
             |> Seq.forall (fun u -> u.Length = actual.Length && u <> actual) @>
 
 [<Theory; AutoData>]
-let ``Frequency chooses one of the given generators``
-    (seeds : Generator<int>) =
+let ``Frequency chooses one of the given generators`` (seeds : Generator<int>) =
 
     let seed i = seeds |> Seq.item i
     let g1 = Gen.init "a"
@@ -147,33 +143,25 @@ let ``Variant modifies a generator using an integer seed`` seed other =
     unexpected <>! actual
 
 [<Theory; AutoData>]
-let ``Two takes a Gen and returns a Gen of tuple``
-    (expected : int) seed =
-
+let ``Two takes a Gen and returns a Gen of tuple``(expected : int) seed =
     let g = Gen.two (Gen.init expected)
     let actual = g |> Gen.generate seed
     (expected, expected) =! actual
 
 [<Theory; AutoData>]
-let ``Three takes a Gen and returns a Gen of triple``
-    (expected : int) seed =
-
+let ``Three takes a Gen and returns a Gen of triple``(expected : int) seed =
     let g = Gen.three (Gen.init expected)
     let actual = g |> Gen.generate seed
     (expected, expected, expected) =! actual
 
 [<Theory; AutoData>]
-let ``Four takes a Gen and returns a Gen of quaple``
-    (expected : int) seed =
-
+let ``Four takes a Gen and returns a Gen of quaple`` (expected : int) seed =
     let g = Gen.four (Gen.init expected)
     let actual = g |> Gen.generate seed
     (expected, expected, expected, expected) =! actual
 
 [<Theory; AutoData>]
-let ``Both map and lift are synonyms``
-    seed (dummy : int) (result : int) =
-
+let ``Both map and lift are synonyms`` seed (dummy : int) (result : int) =
     let run g = Gen.generate seed g
     let g = Gen.init dummy
     let f = fun _ -> result
