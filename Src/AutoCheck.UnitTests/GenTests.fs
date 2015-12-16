@@ -286,3 +286,12 @@ let ``Shuffle returns an empty list when given an empty list`` seed =
 
     let expected = []
     expected =! actual
+
+[<Theory; AutoData>]
+let ``SublistOf generates a random subsequence of a list`` seed (input : int []) =
+    let actual =
+        input
+        |> Seq.ofArray
+        |> Gen.sublistOf
+        |> Gen.generate seed
+    input.Length >! actual.Length
