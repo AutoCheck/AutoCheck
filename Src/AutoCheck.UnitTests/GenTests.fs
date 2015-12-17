@@ -1,12 +1,12 @@
 ﻿module AutoCheck.UnitTests.GenTests
 
-open Xunit.Extensions
+open System
+open AutoCheck
+open AutoCheck.Gen
 open Ploeh.AutoFixture.Xunit
 open Ploeh.AutoFixture
 open Swensen.Unquote
-open AutoCheck.Gen
-open AutoCheck
-open System
+open Xunit.Extensions
 
 [<Theory; AutoData>]
 let ``Same seed produces same elements`` size count seed =
