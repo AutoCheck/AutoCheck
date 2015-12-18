@@ -328,8 +328,7 @@ let sublistOf xs =
 /// <param name="g">The generator to replicate.</param>
 let replicate n g =
     gen {
-        let! x = g
-        return x |> List.replicate n
+        return [ for seed in [ 1..n ] -> g |> generate seed ]
     }
 
 /// <summary>
