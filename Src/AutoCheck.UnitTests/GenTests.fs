@@ -298,25 +298,25 @@ let ``Replicate replicates the value produced by given gen`` seed size count =
     test <@ count = actual.Length && actual |> Seq.forall (fun x -> x = size) @>
 
 [<Theory; AutoData>]
-let ``ListOf generates a list of random length`` seed expected =
+let ``ListOf generates a list of random length`` seed size =
     let run g = Gen.generate seed g
 
     let actual =
-        Gen.init
-        |> Gen.sized
+        Gen.choose (0, size)
+        |> Gen.resize size
         |> Gen.listOf
-        |> Gen.resize expected
         |> run
-    expected >=! actual.Length
+
+    test <@ actual.Length <= size && actual |> Seq.forall (fun x -> x <= size) @>
 
 [<Theory; AutoData>]
-let ``NonEmptyListOf generates a non-empty list of random length`` seed expected =
+let ``NonEmptyListOf generates a non-empty list of random length`` seed size =
     let run g = Gen.generate seed g
 
     let actual =
-        Gen.init
-        |> Gen.sized
-        |> Gen.listOf
-        |> Gen.resize expected
+        Gen.choose (0, size)
+        |> Gen.resize size
+        |> Gen.nonEmptyListOf
         |> run
-    test <@ actual.Length > 0 @>
+
+    test <@ actual.Length >= 0 && actual |> Seq.forall (fun x -> x <= size) @>
