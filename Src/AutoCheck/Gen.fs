@@ -352,5 +352,4 @@ let nonEmptyListOf g =
 /// Generates an infinite sequence.
 /// </summary>
 /// <param name="g">The generator to produce the sequence values from.</param>
-let infiniteSeqOf g =
-    gen { return Seq.initInfinite (fun seed -> generate seed g) }
+let infiniteSeqOf g = gen { return Seq.initInfinite (fun i -> generate i g) }
