@@ -322,7 +322,7 @@ let sublistOf xs =
                 init false ]) xs
 
 /// <summary>
-/// Creates a list of given length, by replicating the given initial Gen<'a>.
+/// Generates a list of given length, by replicating the given initial Gen<'a>.
 /// </summary>
 /// <param name="n">The number of elements to replicate.</param>
 /// <param name="g">The generator to replicate.</param>
@@ -333,8 +333,8 @@ let replicate n g =
     }
 
 /// <summary>
-/// Creates a list of random length. The maximum length of the list depends on
-/// the size parameter.
+/// Generates a list of random length. The maximum length of the list depends
+/// on the size parameter.
 /// </summary>
 /// <param name="g">The generator from which to create a list from.</param>
 let listOf g =
@@ -345,7 +345,7 @@ let listOf g =
         })
 
 /// <summary>
-/// Creates a non-empty list of random length. The maximum length of the list
+/// Generates a non-empty list of random length. The maximum length of the list
 /// depends on the size parameter.
 /// </summary>
 /// <param name="g">The generator from which to create a list from.</param>
