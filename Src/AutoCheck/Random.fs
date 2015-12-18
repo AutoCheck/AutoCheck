@@ -89,3 +89,22 @@ let rec range (l, h) rng =
         let (v, rng') = f 1 0 rng
 
         (l + v % k), rng'
+
+/// <summary>
+/// Creates a new StdGen instance, which is a modified version of the supplied
+/// StdGen isntance. The returned StdGen instance is modified using the integer
+/// seed that is being supplied.
+/// </summary>
+/// <param name="n">The integer seed.</param>
+/// <param name="r">
+/// The initial StdGen instance from which to return a modified one.
+/// </param>
+let rec variant n r =
+    match n with
+    | 0 -> r
+    | _ ->
+        let rand = split r
+        let seed = n / 2
+        if n % 2 = 0
+        then (fst rand) |> variant seed
+        else (snd rand) |> variant seed

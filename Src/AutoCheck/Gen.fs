@@ -49,16 +49,7 @@ let promote f =
 /// </summary>
 /// <param name="s">The integer seed.</param>
 let variant s (Gen m) =
-    let rec rands n r =
-        match n with
-        | 0 -> r
-        | _ ->
-            let rand = Random.split r
-            let seed = n / 2
-            if n % 2 = 0
-            then (fst rand) |> rands seed
-            else (snd rand) |> rands seed
-    Gen(fun n r -> m n (rands s r))
+    Gen(fun n r -> m n (Random.variant s r))
 
 /// <summary>
 /// Run a generator. The size passed to the generator is up to 30; if you want
