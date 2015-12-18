@@ -283,3 +283,15 @@ let ``SublistOf generates a random subsequence of a list`` seed (input : int [])
         |> Gen.sublistOf
         |> Gen.generate seed
     input.Length >! actual.Length
+
+[<Theory; AutoData>]
+let ``ListOf generates a list of random length`` seed expected =
+    let run g = Gen.generate seed g
+
+    let actual =
+        Gen.init
+        |> Gen.sized
+        |> Gen.listOf
+        |> Gen.resize expected
+        |> run
+    expected >=! actual.Length
