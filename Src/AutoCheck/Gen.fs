@@ -347,3 +347,6 @@ let nonEmptyListOf g =
             let! n = choose (1, max 1 s)
             return! vectorOf n g
         })
+
+let infiniteSeqOf g =
+    gen { return Seq.initInfinite (fun seed -> generate seed g) }
