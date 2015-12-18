@@ -322,7 +322,7 @@ let ``NonEmptyListOf generates a non-empty list of random length`` seed size =
     test <@ actual.Length >= 0 && actual |> Seq.forall (fun x -> x <= size) @>
 
 [<Theory; AutoData>]
-let ``InfiniteSeqOf generates an infinite sequence`` seed size count =
+let ``InfiniteSeqOf returns correct result`` seed size count =
     let run g = Gen.generate seed g
 
     let actual =
