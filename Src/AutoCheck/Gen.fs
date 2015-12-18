@@ -332,6 +332,11 @@ let replicate n g =
         return x |> List.replicate n
     }
 
+/// <summary>
+/// Creates a list of random length. The maximum length of the list depends on
+/// the size parameter.
+/// </summary>
+/// <param name="g">The generator from which to create a list from.</param>
 let listOf g =
     sized (fun s ->
         gen {
