@@ -326,4 +326,15 @@ let sublistOf xs =
 /// </summary>
 /// <param name="n">The number of elements to replicate.</param>
 /// <param name="g">The generator to replicate.</param>
-let replicate n g = gen { return List.replicate n g }
+let replicate n g =
+    gen {
+        let! x = g
+        return x |> List.replicate n
+    }
+
+let listOf g =
+    sized (fun s ->
+        gen {
+            let! n = (choose (0, s))
+            return! replicate n g
+        })
