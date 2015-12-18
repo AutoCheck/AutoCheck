@@ -322,11 +322,11 @@ let sublistOf xs =
                 init false ]) xs
 
 /// <summary>
-/// Generates a list of given length, by replicating the given initial Gen<'a>.
+/// Generates a list of the given length.
 /// </summary>
 /// <param name="n">The number of elements to replicate.</param>
 /// <param name="g">The generator to replicate.</param>
-let replicate n g =
+let vectorOf n g =
     gen {
         return [ for seed in [ 1..n ] -> g |> generate seed ]
     }
@@ -340,7 +340,7 @@ let listOf g =
     sized (fun s ->
         gen {
             let! n = choose (0, s)
-            return! replicate n g
+            return! vectorOf n g
         })
 
 /// <summary>
@@ -352,5 +352,5 @@ let nonEmptyListOf g =
     sized (fun s ->
         gen {
             let! n = choose (1, max 1 s)
-            return! replicate n g
+            return! vectorOf n g
         })

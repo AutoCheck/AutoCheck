@@ -285,17 +285,17 @@ let ``SublistOf generates a random subsequence of a list`` seed (input : int [])
     input.Length >! actual.Length
 
 [<Theory; AutoData>]
-let ``Replicate replicates the value produced by given gen`` seed size count =
+let ``VectorOf generates a list of the given length`` seed size length =
     let run g = Gen.generate seed g
 
     let actual =
         Gen.init
         |> Gen.sized
         |> Gen.resize size
-        |> Gen.replicate count
+        |> Gen.vectorOf length
         |> run
 
-    test <@ count = actual.Length && actual |> Seq.forall (fun x -> x = size) @>
+    test <@ length = actual.Length && actual |> Seq.forall (fun x -> x = size) @>
 
 [<Theory; AutoData>]
 let ``ListOf generates a list of random length`` seed size =
