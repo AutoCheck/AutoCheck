@@ -339,7 +339,7 @@ let replicate n g =
 let listOf g =
     sized (fun s ->
         gen {
-            let! n = (choose (0, s))
+            let! n = choose (0, s)
             return! replicate n g
         })
 
@@ -351,6 +351,6 @@ let listOf g =
 let nonEmptyListOf g =
     sized (fun s ->
         gen {
-            let! n = (choose (1, max 1 s))
+            let! n = choose (1, max 1 s)
             return! replicate n g
         })
