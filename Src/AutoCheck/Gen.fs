@@ -320,3 +320,5 @@ let sublistOf xs =
     filter (fun _ ->
         oneOf [ init true
                 init false ]) xs
+
+let replicate n g = gen { return List.replicate n g }
