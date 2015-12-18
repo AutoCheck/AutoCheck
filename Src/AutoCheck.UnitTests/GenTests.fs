@@ -295,3 +295,15 @@ let ``ListOf generates a list of random length`` seed expected =
         |> Gen.resize expected
         |> run
     expected >=! actual.Length
+
+[<Theory; AutoData>]
+let ``NonEmptyListOf generates a non-empty list of random length`` seed expected =
+    let run g = Gen.generate seed g
+
+    let actual =
+        Gen.init
+        |> Gen.sized
+        |> Gen.listOf
+        |> Gen.resize expected
+        |> run
+    test <@ actual.Length > 0 @>

@@ -343,3 +343,15 @@ let listOf g =
             let! n = (choose (0, s))
             return! replicate n g
         })
+
+/// <summary>
+/// Creates a non-empty list of random length. The maximum length of the list
+/// depends on the size parameter.
+/// </summary>
+/// <param name="g">The generator from which to create a list from.</param>
+let nonEmptyListOf g =
+    sized (fun s ->
+        gen {
+            let! n = (choose (1, max 1 s))
+            return! replicate n g
+        })
