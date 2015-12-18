@@ -321,4 +321,9 @@ let sublistOf xs =
         oneOf [ init true
                 init false ]) xs
 
+/// <summary>
+/// Creates a list of given length, by replicating the given initial Gen<'a>.
+/// </summary>
+/// <param name="n">The number of elements to replicate.</param>
+/// <param name="g">The generator to replicate.</param>
 let replicate n g = gen { return List.replicate n g }
