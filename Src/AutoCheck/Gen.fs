@@ -72,8 +72,8 @@ let generate seed (Gen m) =
 /// The action that produces a value to be passed as argument to the generator.
 /// </param>
 let bind (Gen m) f =
-    Gen(fun n r0 ->
-        let r1, r2 = Random.split r0
+    Gen(fun n r ->
+        let (r1, r2) = r |> Random.split
         let (Gen m') = f (m n r1)
         m' n r2)
 
@@ -352,4 +352,6 @@ let nonEmptyListOf g =
 /// Generates an infinite sequence.
 /// </summary>
 /// <param name="g">The generator to produce the sequence values from.</param>
-let infiniteSeqOf g = gen { return Seq.initInfinite (fun i -> generate i g) }
+let infiniteSeqOf g =
+    gen { return Seq.initInfinite (fun seed -> g |> generate seed) }
+
