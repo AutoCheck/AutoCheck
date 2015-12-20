@@ -328,7 +328,7 @@ let ``InfiniteSeqOf returns correct result`` seed size count =
     let actual =
         Gen.choose (0, size)
         |> Gen.resize size
-        |> Gen.infiniteSeqOf
+        |> Gen.infiniteListOf
         |> run
         |> Seq.take count
         |> Seq.toList
