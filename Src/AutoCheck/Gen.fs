@@ -224,9 +224,10 @@ let scale f g = sized (fun n -> resize (f n) g)
 /// <summary>
 /// Generates some example values.
 /// </summary>
-/// <param name="seed">The seed use each time the generator runs.</param>
 /// <param name="g">The generator to run for generating example values.</param>
-let sample seed g = [ for n in [ 0..2..20 ] -> resize n g |> generate seed ]
+let sample g =
+    let seed = fun n -> n + int System.DateTime.UtcNow.Ticks
+    [ for n in [ 0..2..20 ] -> resize n g |> generate (seed n) ]
 
 /// <summary>
 /// Tries to generate a value that satisfies a predicate.
