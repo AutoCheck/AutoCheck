@@ -34,19 +34,19 @@ let ``Different seed produces random elements`` size (seeds : Generator<int>) co
     >! 1
 
 [<Theory; AutoData>]
-let ``Choose produces elements in range`` (seeds : Generator<int>) (size : int) count =
-
+let ``Choose produces elements in range`` (size : int) =
     let upper =  size |> Math.Abs
     let lower = -size
-    let g = Gen.choose (lower, upper) |> Gen.resize size
-    let seed i = seeds |> Seq.item i
 
     let actual =
-        [ for i in 1..count -> Gen.generate (seed i) g ]
+        Gen.choose (lower, upper)
+        |> Gen.resize size
+        |> Gen.sample
 
-    test <@ actual |> Seq.exists (fun item -> item >= lower || item <= upper) @>
     test <@ actual
-            |> Seq.filter (fun item -> item < lower || item > upper)
+            |> Seq.exists (fun item -> item >= lower || item <= upper) @>
+    test <@ actual
+            |> Seq.filter (fun item -> item  < lower || item  > upper)
             |> Seq.isEmpty @>
 
 [<Theory; AutoData>]
@@ -60,17 +60,15 @@ let ``Sized passes the current size`` seed (size : int) =
     test <@ actual >= lower && actual <= upper @>
 
 [<Theory; AutoData>]
-let ``Elements generates one of the given values``
-    (xs : int []) (seeds : Generator<int>) =
-
-    let g = Gen.elements xs
-    let seed i = seeds |> Seq.item i
-
+let ``Elements generates one of the given values`` (xs : int []) =
     let actual =
-        [ for i in 1..30 -> Gen.generate (seed i) g ]
+        xs
+        |> Gen.elements
+        |> Gen.sample
 
-    test <@ xs
-            |> Seq.except actual
+    test <@ actual
+            |> Seq.distinct
+            |> Seq.except xs
             |> Seq.isEmpty @>
 
 [<Theory; AutoData>]
@@ -83,38 +81,33 @@ let ``Resize overrides the size parameter`` (newSize : int) size seed =
     newSize =! actual
 
 [<Theory; AutoData>]
-let ``OneOf randomly uses one of the given generators``
-    (seeds : Generator<int>) =
-
-    let seed i = seeds |> Seq.item i
+let ``OneOf randomly uses one of the given generators`` () =
     let g1 = Gen.init 1
     let g2 = Gen.init 2
     let g3 = Gen.init 3
 
-    let actual =
-        [ for i in 1..9 ->
-            Gen.oneOf [ g1; g2; g3 ] |> Gen.generate (seed i) ]
+    let actual = Gen.oneOf [ g1; g2; g3 ] |> Gen.sample
 
     let unexpected =
         seq {
-            yield [ 1; 1; 1; 1; 1; 1; 1; 1; 1 ]
-            yield [ 2; 2; 2; 2; 2; 2; 2; 2; 2 ]
-            yield [ 3; 3; 3; 3; 3; 3; 3; 3; 3 ]
+            yield [ 1; 1; 1; 1; 1; 1; 1; 1; 1; 1; 1 ]
+            yield [ 2; 2; 2; 2; 2; 2; 2; 2; 2; 2; 2 ]
+            yield [ 3; 3; 3; 3; 3; 3; 3; 3; 3; 3; 3 ]
         }
     test <@ unexpected
             |> Seq.forall (fun u -> u.Length = actual.Length && u <> actual) @>
 
 [<Theory; AutoData>]
-let ``Frequency chooses one of the given generators`` (seeds : Generator<int>) =
-
-    let seed i = seeds |> Seq.item i
-    let g1 = Gen.init "a"
-    let g2 = Gen.init "b"
-    let g3 = Gen.init "c"
+let ``Frequency chooses one of the given generators`` () =
+    let g1 = Gen.init 1
+    let g2 = Gen.init 2
+    let g3 = Gen.init 3
 
     let actual =
-        let gn = Gen.frequency [ (1, g1); (2, g2); (3, g3) ]
-        [ for i in 1..100 -> Gen.generate (seed i) gn ]
+        Gen.frequency [ (100, g1)
+                        (200, g2)
+                        (300, g3) ]
+        |> Gen.sample
         |> Seq.countBy id
         |> Seq.sortBy id
         |> Seq.toList
@@ -182,10 +175,11 @@ let ``Scale adjusts the size parameter correctly`` size seed =
     (size * 2) =! actual
 
 [<Theory; AutoData>]
-let ``Sample generates random values`` seed =
-    let g = Gen.sized Gen.init
-
-    let actual = g |> Gen.sample
+let ``Sample generates random values`` () =
+    let actual =
+        Gen.init
+        |> Gen.sized
+        |> Gen.sample
 
     let expected = Seq.length actual
     expected =! (actual
@@ -232,11 +226,13 @@ let ``GrowingElements correctly chooses among the segments of the list`` seed =
     test <@ List.forall2 (>=) sizes actual @>
 
 [<Theory; AutoData>]
-let ``Shuffle randomly permutes a given list`` (unsorted : int []) seed =
+let ``Shuffle randomly permutes a given list`` count seed (xs : Generator<int>) =
+    let length = max 10 count
     let sorted =
-        unsorted
-        |> Array.sort
-        |> Array.toList
+        xs
+        |> Seq.take length
+        |> Seq.sort
+        |> Seq.toList
 
     let actual =
         sorted
@@ -257,13 +253,14 @@ let ``Shuffle returns an empty list when given an empty list`` seed =
     expected =! actual
 
 [<Theory; AutoData>]
-let ``SublistOf generates a random subsequence of a list`` seed (input : int []) =
+let ``SublistOf generates a random subsequence of a list`` count seed (xs : Generator<int>) =
+    let length = max 10 count
     let actual =
-        input
-        |> Seq.ofArray
+        xs
+        |> Seq.take length
         |> Gen.sublistOf
         |> Gen.generate seed
-    input.Length >! actual.Length
+    length >! actual.Length
 
 [<Theory; AutoData>]
 let ``VectorOf generates a list of the given length`` seed size length =
