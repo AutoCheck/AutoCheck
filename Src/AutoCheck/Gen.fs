@@ -379,4 +379,7 @@ let float =
 
 let double = lift double float
 
-let string = lift string (list char)
+let string =
+    shuffle
+    |> bind (list char)
+    |> lift (List.toArray >> System.String)
