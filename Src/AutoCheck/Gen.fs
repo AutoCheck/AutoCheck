@@ -357,3 +357,4 @@ let infiniteList g =
     gen { return Seq.initInfinite (fun seed -> g |> generate seed) }
 
 let unit = init()
+let byte = choose (0, 256) |> lift byte
