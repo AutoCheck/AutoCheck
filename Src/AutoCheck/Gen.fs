@@ -378,3 +378,5 @@ let float =
     lift3 fraction int32 int32 int32
 
 let double = float |> lift double
+
+let string = list char |> lift string
