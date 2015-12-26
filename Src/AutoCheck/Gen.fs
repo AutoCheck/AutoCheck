@@ -359,6 +359,11 @@ let infiniteList g =
 let unit = init()
 let byte = choose (0, 256) |> lift byte
 
+let char =
+    oneof [ choose (0, 127)
+            choose (0, 255) ]
+    |> lift char
+
 let boolean =
     oneof [ init true
             init false ]
