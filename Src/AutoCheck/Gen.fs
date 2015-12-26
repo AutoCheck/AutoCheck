@@ -357,6 +357,7 @@ let infiniteList g =
     gen { return Seq.initInfinite (fun seed -> g |> generate seed) }
 
 let unit = init()
+
 let byte = choose (0, 256) |> lift byte
 
 let char =
@@ -369,7 +370,9 @@ let boolean =
             init false ]
 
 let int32 = sized (fun n -> choose (-n, n))
+
 let int64 = int32 |> lift (fun n -> int64 (n * 32767))
+
 let float =
     let fraction a b c = float a + float (int b / (abs (int c) + 1))
     lift3 fraction int32 int32 int32
