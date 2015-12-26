@@ -182,7 +182,7 @@ let elements xs =
 /// <remarks>
 /// The input list must be non-empty.
 /// </remarks>
-let oneOf gens =
+let oneof gens =
     let join x = bind x id
     join (elements gens)
 
@@ -310,9 +310,9 @@ let filter is input =
 /// Generates a random subsequence of the given list.
 /// </summary>
 /// <param name="xs">The list to generate a random subsequence from.</param>
-let sublistOf xs =
+let sublist xs =
     filter (fun _ ->
-        oneOf [ init true
+        oneof [ init true
                 init false ]) xs
 
 /// <summary>
@@ -320,7 +320,7 @@ let sublistOf xs =
 /// </summary>
 /// <param name="n">The number of elements to replicate.</param>
 /// <param name="g">The generator to replicate.</param>
-let vectorOf n g =
+let vector n g =
     gen {
         return [ for seed in [ 1..n ] -> g |> generate seed ]
     }
@@ -330,11 +330,11 @@ let vectorOf n g =
 /// on the size parameter.
 /// </summary>
 /// <param name="g">The generator from which to create a list from.</param>
-let listOf g =
+let list g =
     sized (fun s ->
         gen {
             let! n = choose (0, s)
-            return! vectorOf n g
+            return! vector n g
         })
 
 /// <summary>
@@ -342,17 +342,17 @@ let listOf g =
 /// depends on the size parameter.
 /// </summary>
 /// <param name="g">The generator from which to create a list from.</param>
-let nonEmptyListOf g =
+let nonEmptyList g =
     sized (fun s ->
         gen {
             let! n = choose (1, max 1 s)
-            return! vectorOf n g
+            return! vector n g
         })
 
 /// <summary>
 /// Generates an infinite sequence.
 /// </summary>
 /// <param name="g">The generator to produce the sequence values from.</param>
-let infiniteListOf g =
+let infiniteList g =
     gen { return Seq.initInfinite (fun seed -> g |> generate seed) }
 

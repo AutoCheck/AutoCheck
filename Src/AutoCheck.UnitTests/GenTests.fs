@@ -81,12 +81,12 @@ let ``Resize overrides the size parameter`` (newSize : int) size seed =
     newSize =! actual
 
 [<Theory; AutoData>]
-let ``OneOf randomly uses one of the given generators`` () =
+let ``Oneof randomly uses one of the given generators`` () =
     let g1 = Gen.init 1
     let g2 = Gen.init 2
     let g3 = Gen.init 3
 
-    let actual = Gen.oneOf [ g1; g2; g3 ] |> Gen.sample
+    let actual = Gen.oneof [ g1; g2; g3 ] |> Gen.sample
 
     let unexpected =
         seq {
@@ -253,60 +253,60 @@ let ``Shuffle returns an empty list when given an empty list`` seed =
     expected =! actual
 
 [<Theory; AutoData>]
-let ``SublistOf generates a random subsequence of a list`` count seed (xs : Generator<int>) =
+let ``Sublist generates a random subsequence of a list`` count seed (xs : Generator<int>) =
     let length = max 10 count
     let actual =
         xs
         |> Seq.take length
-        |> Gen.sublistOf
+        |> Gen.sublist
         |> Gen.generate seed
     length >! actual.Length
 
 [<Theory; AutoData>]
-let ``VectorOf generates a list of the given length`` seed size length =
+let ``Vector generates a list of the given length`` seed size length =
     let run g = Gen.generate seed g
 
     let actual =
         Gen.init
         |> Gen.sized
         |> Gen.resize size
-        |> Gen.vectorOf length
+        |> Gen.vector length
         |> run
 
     test <@ length = actual.Length && actual |> Seq.forall (fun x -> x = size) @>
 
 [<Theory; AutoData>]
-let ``ListOf generates a list of random length`` seed size =
+let ``List generates a list of random length`` seed size =
     let run g = Gen.generate seed g
 
     let actual =
         Gen.choose (0, size)
         |> Gen.resize size
-        |> Gen.listOf
+        |> Gen.list
         |> run
 
     test <@ actual.Length <= size && actual |> Seq.forall (fun x -> x <= size) @>
 
 [<Theory; AutoData>]
-let ``NonEmptyListOf generates a non-empty list of random length`` seed size =
+let ``NonEmptyList generates a non-empty list of random length`` seed size =
     let run g = Gen.generate seed g
 
     let actual =
         Gen.choose (0, size)
         |> Gen.resize size
-        |> Gen.nonEmptyListOf
+        |> Gen.nonEmptyList
         |> run
 
     test <@ actual.Length >= 0 && actual |> Seq.forall (fun x -> x <= size) @>
 
 [<Theory; AutoData>]
-let ``InfiniteSeqOf returns correct result`` seed size count =
+let ``InfiniteSeq returns correct result`` seed size count =
     let run g = Gen.generate seed g
 
     let actual =
         Gen.choose (0, size)
         |> Gen.resize size
-        |> Gen.infiniteListOf
+        |> Gen.infiniteList
         |> run
         |> Seq.take count
         |> Seq.toList
