@@ -362,3 +362,5 @@ let byte = choose (0, 256) |> lift byte
 let boolean =
     oneof [ init true
             init false ]
+
+let int32 = sized (fun n -> choose (-n, n))
