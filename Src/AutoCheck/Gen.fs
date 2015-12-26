@@ -368,3 +368,5 @@ let int64 = int32 |> lift (fun n -> int64 (n * 32767))
 let float =
     let fraction a b c = float a + float (int b / (abs (int c) + 1))
     lift3 fraction int32 int32 int32
+
+let double = float |> lift double
