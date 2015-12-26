@@ -364,3 +364,4 @@ let boolean =
             init false ]
 
 let int32 = sized (fun n -> choose (-n, n))
+let int64 = int32 |> lift (fun n -> int64 (n * 32767))
