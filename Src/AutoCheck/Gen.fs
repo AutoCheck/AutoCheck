@@ -383,3 +383,5 @@ let string =
     shuffle
     |> bind (list char)
     |> lift (List.toArray >> System.String)
+
+let decimal = lift decimal float
