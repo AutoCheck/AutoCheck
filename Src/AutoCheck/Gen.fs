@@ -356,3 +356,4 @@ let nonEmptyList g =
 let infiniteList g =
     gen { return Seq.initInfinite (fun seed -> g |> generate seed) }
 
+let unit = init()
