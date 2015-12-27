@@ -1,14 +1,14 @@
 ﻿/// <summary>
 /// This module deals with the common task of pseudo-random number generation.
-/// It makes it possible to generate repeatable results, by starting with a sp-
-/// ecified initial random number generator, or to get different results on ea-
-/// ch run by using the system-initialised generator or by supplying a seed fr-
-/// om some other source.
+/// It makes it possible to generate repeatable results, by starting with a
+/// specified initial random number generator, or to get different results on
+/// echch run by using the system-initialised generator or by supplying a seed
+/// from some other source.
 /// </summary>
 /// <remarks>
-/// This implementation uses the Portable Combined Generator of L'Ecuyer for 32
-/// -bit computers, transliterated by Lennart Augustsson. It has a period of r-
-/// oughly 2.30584e18.
+/// This implementation uses the Portable Combined Generator of L'Ecuyer for
+/// 32-bit computers, transliterated by Lennart Augustsson. It has a period of
+/// roughly 2.30584e18.
 /// </remarks>
 [<AutoOpen>]
 module internal AutoCheck.Random
@@ -18,12 +18,12 @@ type StdGen =
     | StdGen of int * int
 
 /// <summary>
-/// The next operation returns an Int that is uniformly distributed in the ran-
-/// ge of at least 30 bits, and a new generator. The result of repeatedly using
-/// next should be at least as statistically robust as the Minimal Standard Ra-
-/// ndom Number Generator. Until more is known about implementations of split,
-/// all we require is that split deliver generators that are (a) not identical
-/// and (b) independently robust in the sense just given.
+/// The next operation returns an Int that is uniformly distributed in the
+/// rangge of at least 30 bits, and a new generator. The result of repeatedly
+/// using next should be at least as statistically robust as the Minimal
+/// Standard Random Number Generator. Until more is known about implementations
+/// of split, all we require is that split deliver generators that are (a) not
+/// identical and (b) independently robust in the sense just given.
 /// </summary>
 let private next (StdGen (s1, s2)) =
     let k    = s1 / 53668
@@ -38,10 +38,10 @@ let private next (StdGen (s1, s2)) =
     (z', StdGen (s1'', s2''))
 
 /// <summary>
-/// The split operation allows one to obtain two distinct random number genera-
-/// tors. This is very useful in functional programs (for example, when passing
-/// a random number generator down to recursive calls), but very little work h-
-/// as been done on statistically robust implementations of split.
+/// The split operation allows one to obtain two distinct random number
+/// generators. This is very useful in functional programs (for example, when
+/// passing a random number generator down to recursive calls), but very little
+/// work has been done on statistically robust implementations of split.
 /// </summary>
 let split (StdGen (s1, s2) as std) =
     let s1' = if s1 = 2147483562 then 1 else s1 + 1
@@ -51,9 +51,9 @@ let split (StdGen (s1, s2) as std) =
     (StdGen (s1', t2), StdGen (t1, s2'))
 
 /// <summary>
-/// The create operation provides a way of producing an initial generator by m-
-/// apping an Int into a generator. Distinct arguments should be likely to pro-
-/// duce distinct generators.
+/// The create operation provides a way of producing an initial generator by
+/// mapping an Int into a generator. Distinct arguments should be likely to
+/// produce distinct generators.
 /// </summary>
 let create i =
     let s       = i &&& 2147483647
