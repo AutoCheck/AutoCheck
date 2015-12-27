@@ -48,8 +48,7 @@ let promote f =
 /// Modifies a generator using an integer seed.
 /// </summary>
 /// <param name="s">The integer seed.</param>
-let variant s (Gen m) =
-    Gen(fun n r -> m n (Random.variant s r))
+let variant s (Gen m) = Gen(fun n r -> m n (Random.variant s r))
 
 /// <summary>
 /// Run a generator. The size passed to the generator is up to 30; if you want
@@ -119,8 +118,7 @@ let lift f m = map f m
 /// <param name="f">The function to apply to the existing generators.</param>
 /// <param name="m1">The existing generator.</param>
 /// <param name="m2">The existing generator.</param>
-let lift2 f m1 m2 =
-    apply (apply (init f) m1) m2
+let lift2 f m1 m2 = apply (apply (init f) m1) m2
 
 /// <summary>
 /// Returns a new generator obtained by applying a function to three existing
@@ -130,8 +128,7 @@ let lift2 f m1 m2 =
 /// <param name="m1">The existing generator.</param>
 /// <param name="m2">The existing generator.</param>
 /// <param name="m3">The existing generator.</param>
-let lift3 f m1 m2 m3 =
-    apply (apply (apply (init f) m1) m2) m3
+let lift3 f m1 m2 m3 = apply (apply (apply (init f) m1) m2) m3
 
 /// <summary>
 /// Returns a new generator obtained by applying a function to four existing
@@ -142,8 +139,7 @@ let lift3 f m1 m2 m3 =
 /// <param name="m2">The existing generator.</param>
 /// <param name="m3">The existing generator.</param>
 /// <param name="m4">The existing generator.</param>
-let lift4 f m1 m2 m3 m4 =
-    apply (apply (apply (apply (init f) m1) m2) m3) m4
+let lift4 f m1 m2 m3 m4 = apply (apply (apply (apply (init f) m1) m2) m3) m4
 
 let two   g = lift2 (fun a b     -> a, b)       g g
 let three g = lift3 (fun a b c   -> a, b, c)    g g g
@@ -151,12 +147,11 @@ let four  g = lift4 (fun a b c d -> a, b, c, d) g g g g
 
 /// <summary>
 /// Generates a random element in the given inclusive range, uniformly
-/// distributed in the closed interval [lower,upper].
+/// distributed in the closed interval [lo,hi].
 /// </summary>
-/// <param name="lower">The lower bound.</param>
-/// <param name="upper">The upper bound.</param>
-let choose (lower, upper) =
-    Gen (fun n r -> r) |> map (Random.range (lower, upper) >> fst)
+/// <param name="lo">The lower bound.</param>
+/// <param name="hi">The upper bound.</param>
+let choose (lo, hi) = Gen(fun n r -> r) |> map (Random.range (lo, hi) >> fst)
 
 /// <summary>
 /// Generates one of the given values.
@@ -323,24 +318,16 @@ let vector n g =
 /// on the size parameter.
 /// </summary>
 /// <param name="g">The generator from which to create a list from.</param>
-let list g =
-    sized (fun s ->
-        gen {
-            let! n = choose (0, s)
-            return! vector n g
-        })
+let list g = sized (fun s -> gen { let! n = choose (0, s)
+                                   return! vector n g })
 
 /// <summary>
 /// Generates a non-empty list of random length. The maximum length of the list
 /// depends on the size parameter.
 /// </summary>
 /// <param name="g">The generator from which to create a list from.</param>
-let nonEmptyList g =
-    sized (fun s ->
-        gen {
-            let! n = choose (1, max 1 s)
-            return! vector n g
-        })
+let nonEmptyList g = sized (fun s -> gen { let! n = choose (1, max 1 s)
+                                           return! vector n g })
 
 /// <summary>
 /// Generates an infinite sequence.
