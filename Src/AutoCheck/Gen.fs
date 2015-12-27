@@ -335,32 +335,64 @@ let nonEmptyList g = sized (fun s -> gen { let! n = choose (1, max 1 s)
 /// <param name="g">The generator to produce the sequence values from.</param>
 let infiniteList g = init (Seq.initInfinite (fun seed -> g |> generate seed))
 
+/// <summary>
+/// Generates a (definitely - random) unit.
+/// </summary>
 let unit = init()
 
+/// <summary>
+/// Generates a random byte.
+/// </summary>
 let byte = choose (0, 256) |> lift byte
 
+/// <summary>
+/// Generates a random character.
+/// </summary>
 let char =
     oneof [ choose (0, 127)
             choose (0, 255) ]
     |> lift char
 
+/// <summary>
+/// Generates a random boolean.
+/// </summary>
 let boolean =
     oneof [ init true
             init false ]
 
+/// <summary>
+/// Generates a 32-bit integer (with absolute value bounded by the generation
+/// size).
+/// </summary>
 let int32 = sized (fun n -> choose (-n, n))
 
+/// <summary>
+/// Generates a 64-bit integer (with absolute value bounded by the generation
+/// size multiplied by 16-bit integer's largest possible value).
+/// </summary>
 let int64 = int32 |> lift (fun n -> int64 (n * 32767))
 
+/// <summary>
+/// Generates a random real number.
+/// </summary>
 let float =
     let fraction a b c = float a + float (int b / (abs (int c) + 1))
     lift3 fraction int32 int32 int32
 
+/// <summary>
+/// Generates a random real number.
+/// </summary>
 let double = lift double float
 
+/// <summary>
+/// Generates a random string.
+/// </summary>
 let string =
     shuffle
     |> bind (list char)
     |> lift (List.toArray >> System.String)
 
+/// <summary>
+/// Generates a random real number.
+/// </summary>
 let decimal = lift decimal float
