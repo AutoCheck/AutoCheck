@@ -104,11 +104,6 @@ let map f m =
     bind m (fun m' ->
         init (f m'))
 
-module Operators =
-    let (>>=) m f = bind m f
-    let (<*>) f m = apply f m
-    let (<!>) f m = map f m
-
 /// <summary>
 /// Returns a new generator obtained by applying a function to an existing
 /// generator. Synonym of map.
