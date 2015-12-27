@@ -316,9 +316,7 @@ let sublist xs =
 /// <param name="n">The number of elements to replicate.</param>
 /// <param name="g">The generator to replicate.</param>
 let vector n g =
-    gen {
-        return [ for seed in [ 1..n ] -> g |> generate seed ]
-    }
+    init ([ for seed in [ 1..n ] -> g |> generate seed ])
 
 /// <summary>
 /// Generates a list of random length. The maximum length of the list depends
@@ -348,8 +346,7 @@ let nonEmptyList g =
 /// Generates an infinite sequence.
 /// </summary>
 /// <param name="g">The generator to produce the sequence values from.</param>
-let infiniteList g =
-    gen { return Seq.initInfinite (fun seed -> g |> generate seed) }
+let infiniteList g = init (Seq.initInfinite (fun seed -> g |> generate seed))
 
 let unit = init()
 
