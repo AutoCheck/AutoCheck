@@ -55,8 +55,10 @@ let split (StdGen (s1, s2) as std) =
 /// mapping an Int into a generator. Distinct arguments should be likely to
 /// produce distinct generators.
 /// </summary>
-let create i =
-    let s       = i &&& 2147483647
+/// <param name="seed">The seed, in order to get different results on each run.
+/// </param>
+let create seed =
+    let s       = seed &&& 2147483647
     let (q, s1) = (s / 2147483562, s % 2147483562)
     let s2      = q % 2147483398
 
