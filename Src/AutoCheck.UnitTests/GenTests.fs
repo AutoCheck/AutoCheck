@@ -136,8 +136,8 @@ let ``Variant modifies a generator using an integer seed`` seed other =
     unexpected <>! actual
 
 [<Theory; AutoData>]
-let ``Two takes a Gen and returns a Gen of tuple``(expected : int) seed =
-    let g = Gen.two (Gen.init expected)
+let ``Pair takes a Gen and returns a Gen of tuple``(expected : int) seed =
+    let g = Gen.pair (Gen.init expected)
     let actual = g |> Gen.generate seed
     (expected, expected) =! actual
 
