@@ -142,8 +142,8 @@ let ``Pair takes a Gen and returns a Gen of tuple``(expected : int) seed =
     (expected, expected) =! actual
 
 [<Theory; AutoData>]
-let ``Three takes a Gen and returns a Gen of triple``(expected : int) seed =
-    let g = Gen.three (Gen.init expected)
+let ``Triple takes a Gen and returns a Gen of triple``(expected : int) seed =
+    let g = Gen.triple (Gen.init expected)
     let actual = g |> Gen.generate seed
     (expected, expected, expected) =! actual
 

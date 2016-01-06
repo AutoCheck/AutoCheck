@@ -141,9 +141,9 @@ let lift3 f m1 m2 m3 = apply (apply (apply (init f) m1) m2) m3
 /// <param name="m4">The existing generator.</param>
 let lift4 f m1 m2 m3 m4 = apply (apply (apply (apply (init f) m1) m2) m3) m4
 
-let pair  g = lift2 (fun a b     -> a, b)       g g
-let three g = lift3 (fun a b c   -> a, b, c)    g g g
-let four  g = lift4 (fun a b c d -> a, b, c, d) g g g g
+let pair   g = lift2 (fun a b     -> a, b)       g g
+let triple g = lift3 (fun a b c   -> a, b, c)    g g g
+let four   g = lift4 (fun a b c d -> a, b, c, d) g g g g
 
 /// <summary>
 /// Generates a random element in the given inclusive range, uniformly
