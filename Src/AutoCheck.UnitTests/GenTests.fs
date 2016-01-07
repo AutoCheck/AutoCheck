@@ -148,8 +148,8 @@ let ``Triple takes a Gen and returns a Gen of triple``(expected : int) seed =
     (expected, expected, expected) =! actual
 
 [<Theory; AutoData>]
-let ``Four takes a Gen and returns a Gen of quaple`` (expected : int) seed =
-    let g = Gen.four (Gen.init expected)
+let ``Quadraple takes a Gen and returns a Gen of quaple`` (expected : int) seed =
+    let g = Gen.quadraple (Gen.init expected)
     let actual = g |> Gen.generate seed
     (expected, expected, expected, expected) =! actual
 
