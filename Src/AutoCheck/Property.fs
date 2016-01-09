@@ -2,6 +2,10 @@
 
 open AutoCheck.Gen
 
+/// <summary>
+/// A generator of values Gen<Result>, in order to make it possible to mix and
+/// match Property combinators and Gen computations.
+/// </summary>
 type Property =
     private
     | Prop of Gen<Result>
