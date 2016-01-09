@@ -46,6 +46,7 @@
   <ItemGroup>
     <Compile Include="AssemblyInfo.fs" />
     <Compile Include="GenTests.fs" />
+    <Compile Include="PropertyTests.fs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\AutoCheck\AutoCheck.fsproj">
