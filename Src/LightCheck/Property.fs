@@ -1,6 +1,6 @@
-﻿module AutoCheck.Property
+﻿module LightCheck.Property
 
-open AutoCheck.Gen
+open LightCheck.Gen
 
 /// <summary>
 /// A generator of values Gen<Result>, in order to make it possible to mix and
@@ -83,3 +83,9 @@ let implies b a =
 /// <param name="b">The precondition's predicate result.</param>
 /// <param name="a">The actual result, to be turned into a property.</param>
 let (==>) b a = implies b a
+
+let label s a =
+    a
+    |> evaluate
+    |> Gen.lift (fun result -> { result with Stamp = s :: result.Stamp })
+    |> Prop

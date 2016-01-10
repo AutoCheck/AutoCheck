@@ -1,8 +1,8 @@
-﻿module AutoCheck.UnitTests.GenTests
+﻿module LightCheck.Tests.GenTests
 
 open System
-open AutoCheck
-open AutoCheck.Gen
+open LightCheck
+open LightCheck.Gen
 open Ploeh.AutoFixture.Xunit
 open Ploeh.AutoFixture
 open Swensen.Unquote

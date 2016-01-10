@@ -11,7 +11,7 @@
 /// roughly 2.30584e18.
 /// </remarks>
 [<AutoOpen>]
-module internal AutoCheck.Random
+module internal LightCheck.Random
 
 type StdGen =
     private

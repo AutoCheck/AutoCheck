@@ -1,10 +1,10 @@
-﻿module AutoCheck.UnitTests.PropertyTests
+﻿module LightCheck.Tests.PropertyTests
 
 open Xunit
 open Swensen.Unquote
 
-open AutoCheck
-open AutoCheck.Property
+open LightCheck
+open LightCheck.Property
 
 [<Fact>]
 let ``ForAll returns correct result for properties that are true`` () =

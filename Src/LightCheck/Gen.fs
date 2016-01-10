@@ -1,4 +1,4 @@
-﻿module AutoCheck.Gen
+﻿module LightCheck.Gen
 
 /// <summary>
 /// A generator for values of type 'a.
@@ -31,7 +31,7 @@ let resize n (Gen m) = Gen(fun _ r -> m n r)
 /// This is an unsafe combinator for the Gen type. Gen is only morally a monad:
 /// two generators that are supposed to be equal will give the same probability
 /// distribution, but they might be different as functions from random number
-/// seeds to values. QuickCheck, and so AutoCheck, maintains the illusion that
+/// seeds to values. QuickCheck, and so LightCheck, maintains the illusion that
 /// a Gen is a probability distribution and does not allow you to distinguish
 /// two generators that have the same distribution.
 /// The promote function allows you to break this illusion by reusing the same
