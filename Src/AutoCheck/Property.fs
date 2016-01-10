@@ -35,6 +35,8 @@ let private unitProperty =
 
 let private toProperty candidate =
     match box candidate with
+    | :? Lazy<bool> as b -> boolProperty b.Value
+    | :? Property   as p -> p
     | :? bool as b -> boolProperty b
     | _            -> unitProperty
 
@@ -54,3 +56,9 @@ let forAll g f =
                         |> evaluate
              return { res with Args = arg.ToString() :: res.Args }
          })
+
+let implies b a =
+    if b then a |> toProperty
+    else     () |> toProperty
+
+let (==>) b a = implies b a
