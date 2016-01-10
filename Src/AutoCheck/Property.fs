@@ -15,6 +15,11 @@ and Result =
       Stamp  : list<string>
       Args   : list<string> }
 
+/// <summary>
+/// Returns a value of type Gen<Result> out of a property. Useful when mix and
+/// matching Property combinators and Gen computations.
+/// </summary>
+/// <param name="property">A property to extract the Gen<Result> from.</param>
 let evaluate property =
     let (Prop result) = property
     result
