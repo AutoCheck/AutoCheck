@@ -57,8 +57,24 @@ let forAll g f =
              return { res with Args = arg.ToString() :: res.Args }
          })
 
+/// <summary>
+/// Returns a property that holds under certain conditions. Laws which are
+/// simple equations are conveniently represented by boolean function, but in
+/// general many laws hold only under certain conditions.
+/// This implication combinator represents such conditional laws.
+/// </summary>
+/// <param name="b">The precondition's predicate result.</param>
+/// <param name="a">The actual result, to be turned into a property.</param>
 let implies b a =
     if b then a |> toProperty
     else     () |> toProperty
 
+/// <summary>
+/// Returns a property that holds under certain conditions. Laws which are
+/// simple equations are conveniently represented by boolean function, but in
+/// general many laws hold only under certain conditions.
+/// This implication combinator represents such conditional laws.
+/// </summary>
+/// <param name="b">The precondition's predicate result.</param>
+/// <param name="a">The actual result, to be turned into a property.</param>
 let (==>) b a = implies b a
