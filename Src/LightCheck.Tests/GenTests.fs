@@ -101,12 +101,10 @@ let ``Oneof randomly uses one of the given generators`` () =
 let ``Frequency chooses one of the given generators`` () =
     let g1 = Gen.init 1
     let g2 = Gen.init 2
-    let g3 = Gen.init 3
 
     let actual =
         Gen.frequency [ (100, g1)
-                        (200, g2)
-                        (300, g3) ]
+                        (200, g2) ]
         |> Gen.sample
         |> Seq.countBy id
         |> Seq.sortBy id
@@ -114,8 +112,7 @@ let ``Frequency chooses one of the given generators`` () =
 
     let g1s = actual |> List.item 0 |> snd
     let g2s = actual |> List.item 1 |> snd
-    let g3s = actual |> List.item 2 |> snd
-    test <@ g1s < g2s && g2s < g3s @>
+    test <@ g1s < g2s @>
 
 [<Theory; AutoData>]
 let ``Return in gen workflow returns correct result`` seed (s : string) =
