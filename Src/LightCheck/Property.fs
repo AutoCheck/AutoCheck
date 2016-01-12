@@ -89,3 +89,4 @@ let label s a =
     |> evaluate
     |> Gen.lift (fun result -> { result with Stamp = s :: result.Stamp })
     |> Prop
+
