@@ -90,3 +90,6 @@ let label s a =
     |> Gen.lift (fun result -> { result with Stamp = s :: result.Stamp })
     |> Prop
 
+let classify b s a =
+    if b then a |> label s
+    else     () |> toProperty
