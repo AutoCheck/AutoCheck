@@ -93,3 +93,5 @@ let label s a =
 let classify b s a =
     if b then a |> label s
     else     () |> toProperty
+
+let trivial b p = classify b "trivial" p
