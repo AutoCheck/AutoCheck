@@ -95,3 +95,5 @@ let classify b s a =
     else     () |> toProperty
 
 let trivial b p = classify b "trivial" p
+
+let collect a p = label (a.ToString()) p
