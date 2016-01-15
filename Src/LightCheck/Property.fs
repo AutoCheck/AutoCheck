@@ -95,6 +95,14 @@ let label s a =
     |> Gen.lift (fun result -> { result with Stamp = s :: result.Stamp })
     |> Prop
 
+/// <summary>
+/// Conditionally labels a test case.
+/// </summary>
+/// <param name="b">
+/// The condition to check whether the test case should be labelled.
+/// </param>
+/// <param name="s">The label.</param>
+/// <param name="a">The test case.</param>
 let classify b s a =
     if b then a |> label s
     else     () |> toProperty
