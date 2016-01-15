@@ -1,11 +1,12 @@
 ﻿module LightCheck.Tests.GenTests
 
-open System
+open Swensen.Unquote
+
 open LightCheck
 open LightCheck.Gen
-open Ploeh.AutoFixture.Xunit
+
 open Ploeh.AutoFixture
-open Swensen.Unquote
+open Ploeh.AutoFixture.Xunit
 open Xunit.Extensions
 
 [<Theory; AutoData>]
@@ -35,7 +36,7 @@ let ``Different seed produces random elements`` size (seeds : Generator<int>) co
 
 [<Theory; AutoData>]
 let ``Choose produces elements in range`` (size : int) =
-    let upper =  size |> Math.Abs
+    let upper =  size |> System.Math.Abs
     let lower = -size
 
     let actual =
@@ -55,7 +56,7 @@ let ``Sized passes the current size`` seed (size : int) =
 
     let actual = Gen.generate seed g
 
-    let upper =  size |> Math.Abs
+    let upper =  size |> System.Math.Abs
     let lower = -size
     test <@ actual >= lower && actual <= upper @>
 
