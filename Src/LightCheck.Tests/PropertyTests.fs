@@ -74,3 +74,22 @@ let ``Label adds expected information to properties`` expected =
             |> Seq.map (fun r -> r.Stamp)
             |> Seq.concat
             |> Seq.forall (fun actual -> expected = actual) @>
+
+[<Theory; AutoData>]
+let ``Classify conditionally labels a test case`` x y expected =
+    let g =
+        Gen.frequency [ (100, Gen.init x)
+                        (200, Gen.init y) ]
+    let prop a =
+        a <> 0 ==> lazy (1/a = 1/a) |> Property.classify (a <> y) expected
+
+    let actual =
+        prop
+        |> Property.forAll g
+        |> Property.evaluate
+        |> Gen.sample
+
+    test <@ actual
+            |> Seq.map (fun r -> r.Stamp)
+            |> Seq.concat
+            |> Seq.exists (fun actual -> expected = actual) @>
