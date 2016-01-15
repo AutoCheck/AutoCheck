@@ -59,7 +59,7 @@ let ``Implies returns correct result when the precondition is true`` () =
             |> Seq.forall id @>
 
 [<Theory; AutoData>]
-let ``Label adds expected information to properties`` expected =
+let ``Label labels a test case`` expected =
     let g = Gen.list Gen.int32
     let prop = fun xs -> xs |> List.rev |> List.rev = xs
 
