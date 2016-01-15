@@ -84,6 +84,11 @@ let implies b a =
 /// <param name="a">The actual result, to be turned into a property.</param>
 let (==>) b a = implies b a
 
+/// <summary>
+/// Labels a test case.
+/// </summary>
+/// <param name="s">The label.</param>
+/// <param name="a">The test case.</param>
 let label s a =
     a
     |> evaluate
