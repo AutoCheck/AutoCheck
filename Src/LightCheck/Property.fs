@@ -117,4 +117,9 @@ let classify b s a =
 /// <param name="a">The test case.</param>
 let trivial b p = classify b "trivial" p
 
+/// <summary>
+/// Gathers all values that are passed to it.
+/// </summary>
+/// <param name="a">The value.</param>
+/// <param name="p">The property.</param>
 let collect a p = label (a.ToString()) p
