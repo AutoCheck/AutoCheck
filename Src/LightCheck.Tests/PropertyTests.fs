@@ -112,3 +112,24 @@ let ``Trivial conditionally labels a test case`` x y =
             |> Seq.map (fun r -> r.Stamps)
             |> Seq.concat
             |> Seq.exists (fun actual -> "trivial" = actual) @>
+
+[<Theory; AutoData>]
+let ``Collect gathers all values that are passed to it`` x y =
+    let g =
+        Gen.frequency [ (100, Gen.init x)
+                        (200, Gen.init y) ]
+    let prop a =
+        a <> 0 ==> lazy (1/a = 1/a) |> Property.collect a
+
+    let actual =
+        prop
+        |> Property.forAll g
+        |> Property.evaluate
+        |> Gen.sample
+
+    test <@ actual
+            |> Seq.map (fun r -> r.Stamps)
+            |> Seq.concat
+            |> Seq.exists (fun actual ->
+                string x = actual ||
+                string y = actual) @>
