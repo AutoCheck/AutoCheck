@@ -107,6 +107,14 @@ let classify b s a =
     if b then a |> label s
     else     () |> toProperty
 
+/// <summary>
+/// Conditionally labels a test case as trivial.
+/// </summary>
+/// <param name="b">
+/// The condition to check whether the test case should be labelled as trivial.
+/// </param>
+/// <param name="s">The label.</param>
+/// <param name="a">The test case.</param>
 let trivial b p = classify b "trivial" p
 
 let collect a p = label (a.ToString()) p
