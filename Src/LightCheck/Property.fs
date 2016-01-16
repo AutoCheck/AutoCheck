@@ -12,7 +12,7 @@ type Property =
 
 and Result =
     { Status : option<bool>
-      Stamp  : list<string>
+      Stamps : list<string>
       Args   : list<string> }
 
 /// <summary>
@@ -26,14 +26,14 @@ let evaluate property =
 
 let private boolProperty a =
     { Status = Some a
-      Stamp  = []
+      Stamps = []
       Args   = [] }
     |> Gen.init
     |> Prop
 
 let private unitProperty =
     { Status = None
-      Stamp  = []
+      Stamps = []
       Args   = [] }
     |> Gen.init
     |> Prop
@@ -92,7 +92,7 @@ let (==>) b a = implies b a
 let label s a =
     a
     |> evaluate
-    |> Gen.lift (fun result -> { result with Stamp = s :: result.Stamp })
+    |> Gen.lift (fun result -> { result with Stamps = s :: result.Stamps })
     |> Prop
 
 /// <summary>

@@ -71,7 +71,7 @@ let ``Label labels a test case`` expected =
         |> Gen.sample
 
     test <@ actual
-            |> Seq.map (fun r -> r.Stamp)
+            |> Seq.map (fun r -> r.Stamps)
             |> Seq.concat
             |> Seq.forall (fun actual -> expected = actual) @>
 
@@ -90,6 +90,6 @@ let ``Classify conditionally labels a test case`` x y expected =
         |> Gen.sample
 
     test <@ actual
-            |> Seq.map (fun r -> r.Stamp)
+            |> Seq.map (fun r -> r.Stamps)
             |> Seq.concat
             |> Seq.exists (fun actual -> expected = actual) @>
