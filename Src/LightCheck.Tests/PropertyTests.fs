@@ -93,3 +93,22 @@ let ``Classify conditionally labels a test case`` x y expected =
             |> Seq.map (fun r -> r.Stamps)
             |> Seq.concat
             |> Seq.exists (fun actual -> expected = actual) @>
+
+[<Theory; AutoData>]
+let ``Trivial conditionally labels a test case`` x y =
+    let g =
+        Gen.frequency [ (100, Gen.init x)
+                        (200, Gen.init y) ]
+    let prop a =
+        a <> 0 ==> lazy (1/a = 1/a) |> Property.trivial (a <> y)
+
+    let actual =
+        prop
+        |> Property.forAll g
+        |> Property.evaluate
+        |> Gen.sample
+
+    test <@ actual
+            |> Seq.map (fun r -> r.Stamps)
+            |> Seq.concat
+            |> Seq.exists (fun actual -> "trivial" = actual) @>
