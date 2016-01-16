@@ -38,7 +38,7 @@ let private unitProperty =
     |> Gen.init
     |> Prop
 
-let private toProperty candidate =
+let private convert candidate =
     match box candidate with
     | :? Lazy<bool> as b -> boolProperty b.Value
     | :? Property   as p -> p
@@ -57,7 +57,7 @@ let forAll g f =
     Prop(gen {
              let! arg = g
              let! res = f arg
-                        |> toProperty
+                        |> convert
                         |> evaluate
              return { res with Args = arg.ToString() :: res.Args }
          })
@@ -71,8 +71,8 @@ let forAll g f =
 /// <param name="b">The precondition's predicate result.</param>
 /// <param name="a">The actual result, to be turned into a property.</param>
 let implies b a =
-    if b then a |> toProperty
-    else     () |> toProperty
+    if b then a |> convert
+    else     () |> convert
 
 /// <summary>
 /// Returns a property that holds under certain conditions. Laws which are
@@ -105,7 +105,7 @@ let label s a =
 /// <param name="a">The test case.</param>
 let classify b s a =
     if b then a |> label s
-    else     () |> toProperty
+    else     () |> convert
 
 /// <summary>
 /// Conditionally labels a test case as trivial.
@@ -123,3 +123,4 @@ let trivial b p = classify b "trivial" p
 /// <param name="a">The value.</param>
 /// <param name="p">The property.</param>
 let collect a p = label (a.ToString()) p
+
