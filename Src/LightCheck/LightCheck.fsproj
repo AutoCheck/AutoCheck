@@ -47,6 +47,7 @@
     <Compile Include="Random.fs" />
     <Compile Include="Gen.fs" />
     <Compile Include="Property.fs" />
+    <Compile Include="Config.fs" />
     <Compile Include="Runner.fs" />
   </ItemGroup>
   <PropertyGroup>
