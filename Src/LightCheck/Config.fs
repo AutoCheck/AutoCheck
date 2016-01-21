@@ -28,3 +28,5 @@ let verbose =
                          let s = n.ToString()
                          let a = ":" + Environment.NewLine + String.Concat(args)
                          s + a }
+
+let defaultConfig = quick
