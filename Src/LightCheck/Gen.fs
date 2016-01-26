@@ -54,14 +54,9 @@ let variant s (Gen m) = Gen(fun n r -> m n (Random.variant s r))
 /// Run a generator. The size passed to the generator is up to 30; if you want
 /// another size then you should explicitly use 'resize'.
 /// </summary>
-/// <param name="seed">The seed, in order to get different results on each run.
-/// </param>
-let generate seed (Gen m) =
-    let (size, randomGen) =
-        seed
-        |> Random.create
-        |> Random.range (0, 30)
-    m size randomGen
+let generate (Gen m) =
+    let (size, rand) = Random.createNew() |> Random.range (0, 30)
+    m size rand
 
 /// <summary>
 /// Sequentially compose two actions, passing any value produced by the first
@@ -216,8 +211,7 @@ let scale f g = sized (fun n -> resize (f n) g)
 /// </summary>
 /// <param name="g">The generator to run for generating example values.</param>
 let sample g =
-    let seed = fun n -> n + int System.DateTime.UtcNow.Ticks
-    [ for n in [ 0..2..20 ] -> resize n g |> generate (seed n) ]
+    [ for n in [ 0..2..20 ] -> resize n g |> generate ]
 
 /// <summary>
 /// Tries to generate a value that satisfies a predicate.
@@ -305,13 +299,18 @@ let sublist xs =
         oneof [ init true
                 init false ]) xs
 
+// http://stackoverflow.com/a/6615060/467754
+let sequence l =
+    let k m m' = bind m (fun x -> bind m' (fun xs -> init (x :: xs)))
+    init [] |> List.foldBack k l
+
 /// <summary>
 /// Generates a list of the given length.
 /// </summary>
 /// <param name="n">The number of elements to replicate.</param>
 /// <param name="g">The generator to replicate.</param>
 let vector n g =
-    init ([ for seed in [ 1..n ] -> g |> generate seed ])
+    sequence [ for _ in [ 1..n ] -> g ]
 
 /// <summary>
 /// Generates a list of random length. The maximum length of the list depends
@@ -328,12 +327,6 @@ let list g = sized (fun s -> gen { let! n = choose (0, s)
 /// <param name="g">The generator from which to create a list from.</param>
 let nonEmptyList g = sized (fun s -> gen { let! n = choose (1, max 1 s)
                                            return! vector n g })
-
-/// <summary>
-/// Generates an infinite sequence.
-/// </summary>
-/// <param name="g">The generator to produce the sequence values from.</param>
-let infiniteList g = init (Seq.initInfinite (fun seed -> g |> generate seed))
 
 /// <summary>
 /// Generates a (definitely - random) unit.

@@ -10,31 +10,6 @@ open Ploeh.AutoFixture.Xunit
 open Xunit.Extensions
 
 [<Theory; AutoData>]
-let ``Same seed produces same elements`` size count seed =
-    let g = Gen.choose (-size, size)
-
-    let actual =
-        [ for i in 1..count -> Gen.generate seed g ]
-
-    actual
-    |> Seq.distinct
-    |> Seq.length
-    =! 1
-
-[<Theory; AutoData>]
-let ``Different seed produces random elements`` size (seeds : Generator<int>) count =
-    let g = Gen.choose (-size, size) |> Gen.resize size
-    let seed i = seeds |> Seq.item i
-
-    let actual =
-        [ for i in 1..count -> Gen.generate (seed i) g ]
-
-    actual
-    |> Seq.distinct
-    |> Seq.length
-    >! 1
-
-[<Theory; AutoData>]
 let ``Choose produces elements in range`` (size : int) =
     let upper =  size |> System.Math.Abs
     let lower = -size
@@ -51,10 +26,10 @@ let ``Choose produces elements in range`` (size : int) =
             |> Seq.isEmpty @>
 
 [<Theory; AutoData>]
-let ``Sized passes the current size`` seed (size : int) =
+let ``Sized passes the current size`` (size : int) =
     let g = Gen.sized (fun s -> Gen.choose (-s, s))
 
-    let actual = Gen.generate seed g
+    let actual = Gen.generate g
 
     let upper =  size |> System.Math.Abs
     let lower = -size
@@ -73,11 +48,11 @@ let ``Elements generates one of the given values`` (xs : int []) =
             |> Seq.isEmpty @>
 
 [<Theory; AutoData>]
-let ``Resize overrides the size parameter`` (newSize : int) size seed =
+let ``Resize overrides the size parameter`` newSize size =
     newSize <>! size
     let g = Gen.sized Gen.init |> Gen.resize newSize
 
-    let actual = g |> Gen.generate seed
+    let actual = g |> Gen.generate
 
     newSize =! actual
 
@@ -116,59 +91,56 @@ let ``Frequency chooses one of the given generators`` () =
     test <@ g1s < g2s @>
 
 [<Theory; AutoData>]
-let ``Return in gen workflow returns correct result`` seed (s : string) =
-    let run g = Gen.generate seed g
-    let actual = gen { return s } |> run
-    (Gen.init s |> run) =! actual
+let ``Return in gen workflow returns correct result`` (s : string) =
+    let actual = gen { return s } |> Gen.generate
+    let expected = Gen.init s |> Gen.generate
+    expected =! actual
 
 [<Theory; AutoData>]
-let ``Variant modifies a generator using an integer seed`` seed other =
+let ``Variant modifies a generator using an integer seed`` seed =
     let g = Gen.choose (-256, 256)
 
     let actual =
         g
-        |> Gen.variant other
-        |> Gen.generate seed
+        |> Gen.variant seed
+        |> Gen.generate
 
-    let unexpected = g |> Gen.generate seed
+    let unexpected = g |> Gen.generate
     unexpected <>! actual
 
 [<Theory; AutoData>]
-let ``Pair takes a Gen and returns a Gen of tuple``(expected : int) seed =
+let ``Pair takes a Gen and returns a Gen of tuple``(expected : int) =
     let g = Gen.pair (Gen.init expected)
-    let actual = g |> Gen.generate seed
+    let actual = g |> Gen.generate
     (expected, expected) =! actual
 
 [<Theory; AutoData>]
-let ``Triple takes a Gen and returns a Gen of triple``(expected : int) seed =
+let ``Triple takes a Gen and returns a Gen of triple``(expected : int) =
     let g = Gen.triple (Gen.init expected)
-    let actual = g |> Gen.generate seed
+    let actual = g |> Gen.generate
     (expected, expected, expected) =! actual
 
 [<Theory; AutoData>]
-let ``Quadraple takes a Gen and returns a Gen of quaple`` (expected : int) seed =
+let ``Quadraple takes a Gen and returns a Gen of quaple`` (expected : int) =
     let g = Gen.quadraple (Gen.init expected)
-    let actual = g |> Gen.generate seed
+    let actual = g |> Gen.generate
     (expected, expected, expected, expected) =! actual
 
 [<Theory; AutoData>]
-let ``Both map and lift are synonyms`` seed (dummy : int) (result : int) =
-    let run g = Gen.generate seed g
+let ``Both map and lift are synonyms`` (dummy : int) (result : int) =
     let g = Gen.init dummy
     let f = fun _ -> result
 
-    (Gen.map f g |> run) =! (Gen.lift f g |> run)
+    (Gen.map f g |> Gen.generate) =! (Gen.lift f g |> Gen.generate)
 
 [<Theory; AutoData>]
-let ``Scale adjusts the size parameter correctly`` size seed =
-    let run g = Gen.generate seed g
-
+let ``Scale adjusts the size parameter correctly`` size =
     let actual =
         Gen.init
         |> Gen.sized
         |> Gen.scale (fun s -> s * 2)
         |> Gen.resize size
-        |> run
+        |> Gen.generate
 
     (size * 2) =! actual
 
@@ -185,37 +157,35 @@ let ``Sample generates random values`` () =
                  |> Seq.length)
 
 [<Theory; AutoData>]
-let ``SuchThatOption tries to gen a value that satisfies a predicate`` seed y =
-    let run g = Gen.generate seed g
+let ``SuchThatOption tries to gen a value that satisfies a predicate`` y =
     let g = Gen.sized (fun size -> Gen.choose (-size, size))
 
     let actual =
         g
         |> Gen.suchThatOption (fun x -> x < y)
-        |> run
+        |> Gen.generate
 
     test <@ Option.isSome actual @>
 
 [<Theory; AutoData>]
-let ``SuchThat generates a value that satisfies a predicate`` seed y =
-    let run g = Gen.generate seed g
+let ``SuchThat generates a value that satisfies a predicate`` y =
     let g = Gen.sized (fun size -> Gen.choose (-size, size))
 
     let actual =
         g
         |> Gen.suchThat (fun x -> x < y)
-        |> run
+        |> Gen.generate
 
     test <@ (fun x -> x < y) actual @>
 
 [<Theory; AutoData>]
-let ``GrowingElements correctly chooses among the segments of the list`` seed =
+let ``GrowingElements correctly chooses among the segments of the list`` =
     let sizes = [ 1..10 ]
     let run g =
         [ for n in sizes ->
               g
               |> Gen.resize n
-              |> Gen.generate seed ]
+              |> Gen.generate ]
 
     let actual = Gen.growingElements sizes |> run
 
@@ -224,7 +194,7 @@ let ``GrowingElements correctly chooses among the segments of the list`` seed =
     test <@ List.forall2 (>=) sizes actual @>
 
 [<Theory; AutoData>]
-let ``Shuffle randomly permutes a given list`` count seed (xs : Generator<int>) =
+let ``Shuffle randomly permutes a given list`` count (xs : Generator<int>) =
     let length = max 10 count
     let sorted =
         xs
@@ -235,78 +205,58 @@ let ``Shuffle randomly permutes a given list`` count seed (xs : Generator<int>) 
     let actual =
         sorted
         |> Gen.shuffle
-        |> Gen.generate seed
+        |> Gen.generate
 
     let unexpected = sorted
     unexpected <>! actual
 
 [<Theory; AutoData>]
-let ``Shuffle returns an empty list when given an empty list`` seed =
+let ``Shuffle returns an empty list when given an empty list`` =
     let actual =
         []
         |> Gen.shuffle
-        |> Gen.generate seed
+        |> Gen.generate
 
     let expected = []
     expected =! actual
 
 [<Theory; AutoData>]
-let ``Sublist generates a random subsequence of a list`` count seed (xs : Generator<int>) =
+let ``Sublist generates a random subsequence of a list`` count (xs : Generator<int>) =
     let length = max 10 count
     let actual =
         xs
         |> Seq.take length
         |> Gen.sublist
-        |> Gen.generate seed
+        |> Gen.generate
     length >! actual.Length
 
 [<Theory; AutoData>]
-let ``Vector generates a list of the given length`` seed size length =
-    let run g = Gen.generate seed g
-
+let ``Vector generates a list of the given length`` size length =
     let actual =
         Gen.init
         |> Gen.sized
         |> Gen.resize size
         |> Gen.vector length
-        |> run
+        |> Gen.generate
 
     test <@ length = actual.Length && actual |> Seq.forall (fun x -> x = size) @>
 
 [<Theory; AutoData>]
-let ``List generates a list of random length`` seed size =
-    let run g = Gen.generate seed g
-
+let ``List generates a list of random length`` size =
     let actual =
         Gen.choose (0, size)
         |> Gen.resize size
         |> Gen.list
-        |> run
+        |> Gen.generate
 
     test <@ actual.Length <= size && actual |> Seq.forall (fun x -> x <= size) @>
 
 [<Theory; AutoData>]
-let ``NonEmptyList generates a non-empty list of random length`` seed size =
-    let run g = Gen.generate seed g
-
+let ``NonEmptyList generates a non-empty list of random length`` size =
     let actual =
         Gen.choose (0, size)
         |> Gen.resize size
         |> Gen.nonEmptyList
-        |> run
+        |> Gen.generate
 
     test <@ actual.Length >= 0 && actual |> Seq.forall (fun x -> x <= size) @>
-
-[<Theory; AutoData>]
-let ``InfiniteSeq returns correct result`` seed size count =
-    let run g = Gen.generate seed g
-
-    let actual =
-        Gen.choose (0, size)
-        |> Gen.resize size
-        |> Gen.infiniteList
-        |> run
-        |> Seq.take count
-        |> Seq.toList
-
-    test <@ count = actual.Length && actual |> Seq.forall (fun x -> x <= size) @>

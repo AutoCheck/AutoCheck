@@ -51,20 +51,6 @@ let split (StdGen (s1, s2) as std) =
     (StdGen (s1', t2), StdGen (t1, s2'))
 
 /// <summary>
-/// The create operation provides a way of producing an initial generator by
-/// mapping an Int into a generator. Distinct arguments should be likely to
-/// produce distinct generators.
-/// </summary>
-/// <param name="seed">The seed, in order to get different results on each run.
-/// </param>
-let create seed =
-    let s       = seed &&& 2147483647
-    let (q, s1) = (s / 2147483562, s % 2147483562)
-    let s2      = q % 2147483398
-
-    StdGen (s1 + 1, s2 + 1)
-
-/// <summary>
 /// The range operation takes a range (lo,hi) and a random number generator g,
 /// and returns a random value, uniformly distributed, in the closed interval
 /// [lo,hi], together with a new generator.
@@ -110,3 +96,15 @@ let rec variant n r =
         if n % 2 = 0
         then (fst rand) |> variant seed
         else (snd rand) |> variant seed
+
+let private r = int System.DateTime.UtcNow.Ticks |> System.Random
+
+/// <summary>
+/// Provides a way of producing an initial generator using a random seed.
+/// </summary>
+let createNew() =
+    let s       = r.Next() &&& 2147483647
+    let (q, s1) = (s / 2147483562, s % 2147483562)
+    let s2      = q % 2147483398
+
+    StdGen (s1 + 1, s2 + 1)
