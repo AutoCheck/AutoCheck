@@ -5,7 +5,7 @@ VisualStudioVersion = 14.0.24720.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "LightCheck", "LightCheck\LightCheck.fsproj", "{001F9B73-33FE-4F6C-95EE-B18776744A53}"
 EndProject
-Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "LightCheck.Tests", "LightCheck.Tests\LightCheck.Tests.fsproj", "{11FCC0F7-22CB-43EF-B4BC-E1FA4A2180F2}"
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "LightCheck.UnitTests", "LightCheck.UnitTests\LightCheck.UnitTests.fsproj", "{11FCC0F7-22CB-43EF-B4BC-E1FA4A2180F2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
