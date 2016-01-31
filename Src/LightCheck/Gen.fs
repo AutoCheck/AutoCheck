@@ -301,7 +301,10 @@ let sublist xs =
 
 // http://stackoverflow.com/a/6615060/467754
 let sequence l =
-    let k m m' = bind m (fun x -> bind m' (fun xs -> init (x :: xs)))
+    let k m m' =
+        bind m (fun x ->
+            bind m' (fun xs ->
+                init (x :: xs)))
     init [] |> List.foldBack k l
 
 /// <summary>
