@@ -299,7 +299,24 @@ let sublist xs =
         oneof [ init true
                 init false ]) xs
 
-// http://stackoverflow.com/a/6615060/467754
+/// <summary>
+/// Takes a list of generators of type 'a, evaluates each one of them, and
+/// collect the result, into a new generator of type 'a list.
+/// </summary>
+/// <param name="l">The list of generators of type 'a.</param>
+/// <remarks>
+/// This is written so that the F# compiler will use a tail call, as shown in
+/// the resulting excerpt of generated IL:
+///   IL_0000: nop
+///   IL_0001: call class [FSharp.Core]Microsoft.FSharp.Core.FSharpFunc`2<cl...
+///   IL_0006: ldarg.0
+///   IL_0007: call class [FSharp.Core]Microsoft.FSharp.Collections.FSharpLi...
+///   IL_000c: call class LightCheck.Gen/Gen`1<!!0> LightCheck.Gen::'init'<c...
+///   IL_0011: tail.
+///   IL_0013: call !!1 [FSharp.Core]Microsoft.FSharp.Collections.ListModule...
+///   IL_0018: ret
+/// See also: http://stackoverflow.com/a/6615060/467754
+/// </remarks>
 let sequence l =
     let k m m' =
         bind m (fun x ->
