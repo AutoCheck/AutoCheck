@@ -315,7 +315,9 @@ let sublist xs =
 ///   IL_0011: tail.
 ///   IL_0013: call !!1 [FSharp.Core]Microsoft.FSharp.Collections.ListModule...
 ///   IL_0018: ret
-/// See also: http://stackoverflow.com/a/6615060/467754
+/// See also:
+///   http://stackoverflow.com/a/6615060/467754,
+///   http://stackoverflow.com/a/35132220/467754
 /// </remarks>
 let sequence l =
     let k m m' =
