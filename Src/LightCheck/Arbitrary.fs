@@ -8,6 +8,7 @@ open LightCheck.Gen
 /// </summary>
 [<AbstractClass>]
 type Arbitrary<'a>() =
+
     /// <summary>
     /// A generator for values of the given type.
     /// </summary>
@@ -24,4 +25,3 @@ type Arbitrary<'a>() =
     /// </summary>
     abstract      Shrink   : 'a -> 'a seq
     override this.Shrink _ = Seq.empty
-
