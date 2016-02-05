@@ -25,3 +25,102 @@ type Arbitrary<'a>() =
     /// </summary>
     abstract      Shrink   : 'a -> 'a seq
     override this.Shrink _ = Seq.empty
+
+type ArbitraryUnit() =
+    inherit Arbitrary<unit>()
+
+    /// <summary>
+    /// Generates a (definitely - random) unit.
+    /// </summary>
+    override this.Generator = init()
+
+type ArbitraryByte() =
+    inherit Arbitrary<byte>()
+
+    /// <summary>
+    /// Generates a random byte.
+    /// </summary>
+    override this.Generator = choose (0, 256) |> lift byte
+
+type ArbitraryChar() =
+    inherit Arbitrary<char>()
+
+    /// <summary>
+    /// Generates a random character.
+    /// </summary>
+    override this.Generator =
+        oneof [ choose (0, 127)
+                choose (0, 255) ]
+        |> lift char
+
+type ArbitraryBool() =
+    inherit Arbitrary<bool>()
+
+    /// <summary>
+    /// Generates a random boolean.
+    /// </summary>
+    override this.Generator =
+        oneof [ init true
+                init false ]
+
+type ArbitraryInt() =
+    inherit Arbitrary<int>()
+
+    /// <summary>
+    /// Generates a 32-bit integer (with the absolute value bounded by the
+    /// generation size).
+    /// </summary>
+    override this.Generator = sized (fun n -> choose (-n, n))
+
+type ArbitraryInt64() =
+    inherit Arbitrary<int64>()
+
+    /// <summary>
+    /// Generates a 64-bit integer (with absolute value bounded by the
+    /// generation size multiplied by 16-bit integer's largest possible value).
+    /// </summary>
+    override this.Generator =
+        ArbitraryInt().Generator
+        |> lift (fun n -> int64 (n * 32767))
+
+type ArbitraryString() =
+    inherit Arbitrary<string>()
+
+    /// <summary>
+    /// Generates a random string.
+    /// </summary>
+    override this.Generator =
+        shuffle
+        |> bind (list (ArbitraryChar()).Generator)
+        |> lift (List.toArray >> System.String)
+
+type ArbitraryFloat() =
+    inherit Arbitrary<float>()
+
+    /// <summary>
+    /// Generates a random real number.
+    /// </summary>
+    override this.Generator =
+        let fraction a b c = float a + float (int b / (abs (int c) + 1))
+        let g = ArbitraryInt().Generator
+        lift3 fraction g g g
+
+type ArbitraryDouble() =
+    inherit Arbitrary<double>()
+
+    /// <summary>
+    /// Generates a random real number.
+    /// </summary>
+    override this.Generator =
+        ArbitraryFloat().Generator
+        |> lift double
+
+type ArbitraryDecimal() =
+    inherit Arbitrary<decimal>()
+
+    /// <summary>
+    /// Generates a random real number.
+    /// </summary>
+    override this.Generator =
+        ArbitraryFloat().Generator
+        |> lift decimal

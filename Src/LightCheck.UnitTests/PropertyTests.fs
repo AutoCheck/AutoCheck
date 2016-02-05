@@ -11,7 +11,7 @@ open Xunit.Extensions
 
 [<Fact>]
 let ``ForAll returns correct result for properties that are true`` () =
-    let g = Gen.list Gen.int32
+    let g = Gen.list (ArbitraryInt()).Generator
     let prop = fun xs -> xs |> List.rev |> List.rev = xs
 
     let actual =
@@ -27,7 +27,7 @@ let ``ForAll returns correct result for properties that are true`` () =
 
 [<Fact>]
 let ``ForAll returns correct result for properties that are false`` () =
-    let g = Gen.list Gen.int32
+    let g = Gen.list (ArbitraryInt()).Generator
     let prop = fun xs -> xs |> List.rev = xs
 
     let actual =
@@ -44,7 +44,7 @@ let ``ForAll returns correct result for properties that are false`` () =
 
 [<Fact>]
 let ``Implies returns correct result when the precondition is true`` () =
-    let g = Gen.int32
+    let g = (ArbitraryInt()).Generator
     let prop a = a <> 0 ==> lazy (1/a = 1/a)
 
     let actual =
@@ -60,7 +60,7 @@ let ``Implies returns correct result when the precondition is true`` () =
 
 [<Theory; AutoData>]
 let ``Label labels a test case`` expected =
-    let g = Gen.list Gen.int32
+    let g = Gen.list (ArbitraryInt()).Generator
     let prop = fun xs -> xs |> List.rev |> List.rev = xs
 
     let actual =
