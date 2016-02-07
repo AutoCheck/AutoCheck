@@ -358,7 +358,7 @@ let unit = init()
 /// <summary>
 /// Generates a random byte.
 /// </summary>
-let byte = choose (0, 256) |> lift byte
+let byte = choose (0, 256) |> lift Operators.byte
 
 /// <summary>
 /// Generates a random character.
@@ -366,7 +366,7 @@ let byte = choose (0, 256) |> lift byte
 let char =
     oneof [ choose (0, 127)
             choose (0, 255) ]
-    |> lift char
+    |> lift Operators.char
 
 /// <summary>
 /// Generates a random boolean.
@@ -379,25 +379,26 @@ let boolean =
 /// Generates a 32-bit integer (with absolute value bounded by the generation
 /// size).
 /// </summary>
-let int32 = sized (fun n -> choose (-n, n))
+let int = sized (fun n -> choose (-n, n))
 
 /// <summary>
 /// Generates a 64-bit integer (with absolute value bounded by the generation
 /// size multiplied by 16-bit integer's largest possible value).
 /// </summary>
-let int64 = int32 |> lift (fun n -> int64 (n * 32767))
+let int64 = int |> lift (fun n -> Operators.int64 (n * 32767))
 
 /// <summary>
 /// Generates a random real number.
 /// </summary>
 let float =
-    let fraction a b c = float a + float (int b / (abs (int c) + 1))
-    lift3 fraction int32 int32 int32
+    let fraction a b c =
+        float a + float (Operators.int b / (abs (Operators.int c) + 1))
+    lift3 fraction int int int
 
 /// <summary>
 /// Generates a random real number.
 /// </summary>
-let double = lift double float
+let double = lift ExtraTopLevelOperators.double float
 
 /// <summary>
 /// Generates a random string.
@@ -410,4 +411,4 @@ let string =
 /// <summary>
 /// Generates a random real number.
 /// </summary>
-let decimal = lift decimal float
+let decimal = lift Operators.decimal float
