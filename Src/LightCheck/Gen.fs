@@ -1,4 +1,16 @@
-﻿module LightCheck.Gen
+﻿/// <summary>
+/// LightCheck exports some basic generators, and some combinators for making
+/// new ones. Gen of 'a is the type for generators of 'a's and essentially is
+/// a State Monad combining a pseudo-random generation seed, and a size value
+/// for data structures (i.e. list length).
+/// Using the type Gen of 'a, we can specify at the same time a set of values
+/// that can be generated and a probability distribution on that set.
+///
+/// Read more about how it works here:
+/// http://www.dcc.fc.up.pt/~pbv/aulas/tapf/slides/quickcheck.html#the-gen-monad
+/// http://quviq.com/documentation/eqc/index.html
+/// </summary>
+module LightCheck.Gen
 
 /// <summary>
 /// A generator for values of type 'a.
