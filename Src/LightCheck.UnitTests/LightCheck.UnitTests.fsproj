@@ -134,6 +134,7 @@
     <Content Include="app.config" />
     <Compile Include="AssemblyInfo.fs" />
     <Compile Include="GenTests.fs" />
+    <Compile Include="ShrinkTests.fs" />
     <Compile Include="PropertyTests.fs" />
   </ItemGroup>
   <ItemGroup>

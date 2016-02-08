@@ -8,3 +8,12 @@
 /// http://www.dcc.fc.up.pt/~pbv/aulas/tapf/slides/quickcheck.html#shrinking
 /// </summary>
 module LightCheck.Shrink
+
+/// <summary>
+/// Shrinks to false.
+/// </summary>
+/// <param name="x">The boolean value to shrink.</param>
+let bool =
+    function
+    | true -> [ false ]
+    | _    -> []
