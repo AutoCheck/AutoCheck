@@ -383,7 +383,7 @@ let char =
 /// <summary>
 /// Generates a random boolean.
 /// </summary>
-let boolean =
+let bool =
     oneof [ init true
             init false ]
 
