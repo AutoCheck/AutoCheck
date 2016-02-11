@@ -370,7 +370,7 @@ let unit = init()
 /// <summary>
 /// Generates a random byte.
 /// </summary>
-let byte = choose (0, 256) |> lift Operators.byte
+let byte = choose (0, 255) |> map Operators.byte
 
 /// <summary>
 /// Generates a random character.
