@@ -63,7 +63,7 @@ let promote f =
 let variant s (Gen m) = Gen(fun n r -> m n (Random.variant s r))
 
 /// <summary>
-/// Run a generator. The size passed to the generator is up to 30; if you want
+/// Runs a generator. The size passed to the generator is up to 30; if you want
 /// another size then you should explicitly use 'resize'.
 /// </summary>
 let generate (Gen m) =
