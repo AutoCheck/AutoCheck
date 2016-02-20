@@ -376,8 +376,8 @@ let byte = choose (0, 255) |> map Operators.byte
 /// Generates a random character.
 /// </summary>
 let char =
-    oneof [ choose (0, 127)
-            choose (0, 255) ]
+    oneof [ choose ( 32, 126)
+            choose (127, 255) ]
     |> lift Operators.char
 
 /// <summary>
