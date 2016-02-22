@@ -416,8 +416,8 @@ let double = lift ExtraTopLevelOperators.double float
 /// Generates a random string.
 /// </summary>
 let string =
-    shuffle
-    |> bind (list char)
+    char
+    |> list
     |> lift (List.toArray >> System.String)
 
 /// <summary>
