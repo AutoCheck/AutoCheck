@@ -404,7 +404,7 @@ let int64 = int |> lift (fun n -> Operators.int64 (n * 32767))
 /// </summary>
 let float =
     let fraction a b c =
-        float a + float (Operators.int b / (abs (Operators.int c) + 1))
+        float a + float b / (abs (float c) + 1.0)
     lift3 fraction int int int
 
 /// <summary>
