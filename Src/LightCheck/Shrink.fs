@@ -10,6 +10,13 @@
 module LightCheck.Shrink
 
 /// <summary>
+/// A shrinker for values of type 'a.
+/// </summary>
+type Shrink<'a> =
+    private
+    | Shrink of ('a -> 'a seq)
+
+/// <summary>
 /// Shrinks to false.
 /// </summary>
 /// <param name="x">The boolean value to shrink.</param>
