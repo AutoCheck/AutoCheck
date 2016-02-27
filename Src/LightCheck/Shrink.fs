@@ -22,5 +22,7 @@ type Shrink<'a> =
 /// <param name="x">The boolean value to shrink.</param>
 let bool =
     function
-    | true -> [ false ]
-    | _    -> []
+    | true -> Seq.singleton false
+    | _    -> Seq.empty
+    |> Shrink
+
