@@ -47,3 +47,7 @@ shrinkIntegral x =
 *)
 
 let quot a b = System.Math.DivRem(int a, int b) |> fst
+
+let s2 state =
+    let generator s = Some(state - s, quot s 2)
+    Seq.unfold generator state |> Seq.tail
