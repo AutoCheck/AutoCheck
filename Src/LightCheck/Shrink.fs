@@ -51,3 +51,6 @@ let quot a b = System.Math.DivRem(int a, int b) |> fst
 let s2 state =
     let generator s = Some(state - s, quot s 2)
     Seq.unfold generator state |> Seq.tail
+
+let s1 x = if x < 0 then Seq.singleton -x
+                    else Seq.empty
