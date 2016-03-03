@@ -54,3 +54,8 @@ let s2 state =
 
 let s1 x = if x < 0 then Seq.singleton -x
                     else Seq.empty
+
+let shrinkIntegral x =
+    let s2 = Seq.takeWhile (fun el -> abs x > abs el) (Seq.append [0] (s2 x))
+    Seq.append (s1 x) s2
+    |> Seq.distinct
