@@ -52,10 +52,9 @@ let s2 state =
     let generator s = Some(state - s, quot s 2)
     Seq.unfold generator state |> Seq.tail
 
-let s1 x = if x < 0 then Seq.singleton -x
-                    else Seq.empty
-
 let shrinkIntegral x =
+    let s1 = if x < 0 then Seq.singleton -x
+                      else Seq.empty
     let s2 = Seq.takeWhile (fun el -> abs x > abs el) (Seq.append [0] (s2 x))
-    Seq.append (s1 x) s2
+    Seq.append s1 s2
     |> Seq.distinct
