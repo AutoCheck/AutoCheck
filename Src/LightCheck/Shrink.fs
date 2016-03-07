@@ -46,7 +46,7 @@ shrinkIntegral x =
             (False, True)  -> a + b > 0
 *)
 
-let shrinkIntegral x =
+let number x =
     let s2 state =
         let quot a b = System.Math.DivRem(int a, int b) |> fst
         let generator s = Some(state - s, quot s 2)
