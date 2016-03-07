@@ -47,12 +47,11 @@ shrinkIntegral x =
 *)
 
 let number x =
-    let s2 state =
-        let quot a b = System.Math.DivRem(int a, int b) |> fst
-        let generator s = Some(state - s, quot s 2)
-        Seq.unfold generator state |> Seq.tail
-    let s1 = if x < 0 then Seq.singleton -x
-                      else Seq.empty
-    let s2 = Seq.takeWhile (fun el -> abs x > abs el) (Seq.append [0] (s2 x))
-    Seq.append s1 s2
+    x
+    |> Seq.unfold (fun s -> Some(x - s, s / 2))
+    |> Seq.tail
+    |> Seq.append [ 0 ]
+    |> Seq.takeWhile (fun el -> abs x > abs el)
+    |> Seq.append (if x < 0 then Seq.singleton -x
+                   else Seq.empty)
     |> Seq.distinct
