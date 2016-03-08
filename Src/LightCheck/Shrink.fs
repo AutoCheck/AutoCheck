@@ -27,7 +27,7 @@ let bool =
     | true -> Seq.singleton false
     | _    -> Seq.empty
 
-let inline number n =
+let inline numeric n =
     let genericTwo = GenericOne + GenericOne
     n
     |> Seq.unfold (fun s -> Some(n - s, s / genericTwo))
