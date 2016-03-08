@@ -30,12 +30,14 @@ let bool =
     | _    -> Seq.empty
     |> Shrink
 
-let number x =
-    x
-    |> Seq.unfold (fun s -> Some(x - s, s / 2))
-    |> Seq.tail
-    |> Seq.append [ 0 ]
-    |> Seq.takeWhile (fun el -> abs x > abs el)
-    |> Seq.append (if x < 0 then Seq.singleton -x
-                   else Seq.empty)
-    |> Seq.distinct
+let number =
+    fun x ->
+        x
+        |> Seq.unfold (fun s -> Some(x - s, s / 2))
+        |> Seq.tail
+        |> Seq.append [ 0 ]
+        |> Seq.takeWhile (fun el -> abs x > abs el)
+        |> Seq.append (if x < 0 then Seq.singleton -x
+                       else Seq.empty)
+        |> Seq.distinct
+    |> Shrink
