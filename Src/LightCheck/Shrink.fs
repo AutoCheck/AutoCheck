@@ -16,6 +16,10 @@ type Shrink<'a> =
     private
     | Shrink of ('a -> 'a seq)
 
+let evaluate shrinker =
+    let (Shrink func) = shrinker
+    func
+
 /// <summary>
 /// Shrinks to false.
 /// </summary>
@@ -25,10 +29,6 @@ let bool =
     | true -> Seq.singleton false
     | _    -> Seq.empty
     |> Shrink
-
-let evaluate shrinker =
-    let (Shrink func) = shrinker
-    func
 
 let number x =
     x
