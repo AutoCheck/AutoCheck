@@ -7,8 +7,10 @@ open LightCheck
 
 [<Fact>]
 let ``False shrinks to an empty list`` () =
-    Shrink.bool false =! []
+    let shrink = Shrink.evaluate Shrink.bool
+    shrink false =! Seq.empty
 
 [<Fact>]
 let ``True shrinks to false`` () =
-    Shrink.bool true =! [ false ]
+    let shrink = Shrink.evaluate Shrink.bool
+    shrink true |> Seq.exactlyOne =! false

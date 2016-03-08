@@ -26,6 +26,10 @@ let bool =
     | _    -> Seq.empty
     |> Shrink
 
+let evaluate shrinker =
+    let (Shrink func) = shrinker
+    func
+
 (*
 -- | Shrink an integral number.
 shrinkIntegral :: Integral a => a -> [a]
