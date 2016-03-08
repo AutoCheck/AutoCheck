@@ -9,6 +9,8 @@
 /// </summary>
 module LightCheck.Shrink
 
+open FSharp.Core.LanguagePrimitives
+
 /// <summary>
 /// A shrinker for values of type 'a.
 /// </summary>
@@ -25,12 +27,13 @@ let bool =
     | true -> Seq.singleton false
     | _    -> Seq.empty
 
-let number x =
-    x
-    |> Seq.unfold (fun s -> Some(x - s, s / 2))
+let inline number n =
+    let genericTwo = GenericOne + GenericOne
+    n
+    |> Seq.unfold (fun s -> Some(n - s, s / genericTwo))
     |> Seq.tail
-    |> Seq.append [ 0 ]
-    |> Seq.takeWhile (fun el -> abs x > abs el)
-    |> Seq.append (if x < 0 then Seq.singleton -x
-                    else Seq.empty)
+    |> Seq.append [ GenericZero ]
+    |> Seq.takeWhile (fun el -> abs n > abs el)
+    |> Seq.append (if n < GenericZero then Seq.singleton -n
+                   else Seq.empty)
     |> Seq.distinct
