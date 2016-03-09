@@ -27,6 +27,10 @@ let bool =
     | true -> Seq.singleton false
     | _    -> Seq.empty
 
+/// <summary>
+/// Shrinks towards smaller numeric values.
+/// </summary>
+/// <param name="n">The numeric value to shrink.</param>
 let inline numeric n =
     let genericTwo = GenericOne + GenericOne
     n
