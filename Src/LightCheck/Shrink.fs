@@ -41,3 +41,10 @@ let inline numeric n =
     |> Seq.append (if n < GenericZero then Seq.singleton -n
                    else Seq.empty)
     |> Seq.distinct
+
+/// <summary>
+/// Injects a function of type 'a -> 'a seq into a shrinker.
+/// </summary>
+/// <param name="f">The function to inject into a shrinker.</param>
+let init f = Shrink f
+
