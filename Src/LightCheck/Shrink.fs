@@ -48,3 +48,10 @@ let inline numeric n =
 /// <param name="f">The function to inject into a shrinker.</param>
 let init f = Shrink f
 
+/// <summary>
+/// Returns a value of type 'a -> 'a seq out of a shrinker.
+/// </summary>
+/// <param name="f">
+/// The union case from where the shrink function must be returned.
+/// </param>
+let evaluate (Shrink f) = f
