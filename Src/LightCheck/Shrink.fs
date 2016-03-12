@@ -31,7 +31,7 @@ let bool =
 /// Shrinks towards smaller numeric values.
 /// </summary>
 /// <param name="n">The numeric value to shrink.</param>
-let inline numeric n =
+let inline number n =
     let genericTwo = GenericOne + GenericOne
     n
     |> Seq.unfold (fun s -> Some(n - s, s / genericTwo))
