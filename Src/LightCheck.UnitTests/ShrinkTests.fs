@@ -35,9 +35,9 @@ let ``Numbers are shrinked towards smaller ones`` (fixture : IFixture) =
         |> Seq.distinct
     Seq.compareWith Operators.compare expected actual =! 0
 
-[<Fact>]
-let ``Injecting a function into a shrinker and back returns correct result`` () =
+[<Theory; AutoData>]
+let ``Injecting a function into a shrinker and back returns correct result`` input =
     let origin = Shrink.number
     let remote = origin |> Shrink.init |> Shrink.evaluate
-    (-7 |> origin |> Seq.toList) =!
-    (-7 |> remote |> Seq.toList)
+    (input |> origin |> Seq.toList) =!
+    (input |> remote |> Seq.toList)
