@@ -55,3 +55,10 @@ let init f = Shrink f
 /// The union case from where the shrink function must be returned.
 /// </param>
 let evaluate (Shrink f) = f
+
+let list shrink xs =
+    seq {
+        for x in xs do
+            for y in shrink x do
+                yield [ y ]
+    }
