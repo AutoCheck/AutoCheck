@@ -58,6 +58,7 @@ let evaluate (Shrink f) = f
 
 let list shrink xs =
     seq {
+        yield []
         for x in xs do
             for y in shrink x do
                 yield [ y ]
