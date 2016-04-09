@@ -65,7 +65,7 @@ let evaluate (Shrink f) = f
 /// The shrinker function, to be applied on each element of the list.
 /// </param>
 /// <param name="xs">The input sequence to shrink.</param>
-let list (Shrink f) xs =
+let list xs (Shrink f) =
     seq {
         yield []
         for x in xs do
