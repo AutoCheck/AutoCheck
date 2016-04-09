@@ -41,3 +41,20 @@ let ``Injecting a function into a shrinker and back returns correct result`` inp
     let remote = origin |> Shrink.init |> Shrink.evaluate
     (input |> origin |> Seq.toList) =!
     (input |> remote |> Seq.toList)
+
+[<Theory; AutoData>]
+let ``Lists are shrinked based on the supplied shrinker`` (xs : int seq) =
+    let shrinker = Shrink.init Shrink.number
+
+    let actual = shrinker |> Shrink.list xs
+
+    let expected =
+        let f = Shrink.evaluate shrinker
+        seq {
+            yield []
+            for x in xs do
+                for y in f x do
+                    yield [ y ]
+        }
+
+    Seq.compareWith Operators.compare expected actual =! 0
