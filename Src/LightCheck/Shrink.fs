@@ -56,6 +56,15 @@ let init f = Shrink f
 /// </param>
 let evaluate (Shrink f) = f
 
+/// <summary>
+/// Shrinks a sequence of elements of type 'a. First it yields an empty
+/// sequence, and then it iterates the input sequence, and shrinks each
+/// one of the items given the shrinker which is passed as a parameter.
+/// </summary>
+/// <param name="f">
+/// The shrinker function, to be applied on each element of the list.
+/// </param>
+/// <param name="xs">The input sequence to shrink.</param>
 let list (Shrink f) xs =
     seq {
         yield []
