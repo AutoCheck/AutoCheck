@@ -56,10 +56,10 @@ let init f = Shrink f
 /// </param>
 let evaluate (Shrink f) = f
 
-let list shrink xs =
+let list (Shrink f) xs =
     seq {
         yield []
         for x in xs do
-            for y in shrink x do
+            for y in f x do
                 yield [ y ]
     }
