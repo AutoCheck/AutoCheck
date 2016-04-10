@@ -1,4 +1,4 @@
-﻿module LightCheck.Tests.GenTests
+﻿module LightCheck.Tests.GenExamples
 
 open Swensen.Unquote
 
