@@ -1,4 +1,4 @@
-﻿module LightCheck.Tests.ShrinkTests
+﻿module LightCheck.Tests.ShrinkExamples
 
 open Xunit
 open Xunit.Extensions
