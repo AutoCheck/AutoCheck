@@ -135,7 +135,7 @@
     <Compile Include="AssemblyInfo.fs" />
     <Compile Include="GenExamples.fs" />
     <Compile Include="ShrinkExamples.fs" />
-    <Compile Include="PropertyTests.fs" />
+    <Compile Include="PropertyExamples.fs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="mscorlib" />
