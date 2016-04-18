@@ -269,21 +269,6 @@ let growingElements xs =
         elements (xs |> Seq.take n))
 
 /// <summary>
-/// Generates a random permutation of the given list.
-/// </summary>
-/// <param name="xs">The list to permute.</param>
-let rec shuffle xs =
-    let pickOne xs = xs |> List.map (fun x -> x, xs |> List.except [ x ])
-    gen {
-        match xs with
-        | [ ] -> return []
-        |  _  ->
-            let! (y, ys) = xs |> pickOne |> elements
-            let!     ys' = shuffle ys
-            return (y :: ys')
-    }
-
-/// <summary>
 /// Returns a new collection containing only the elements of the collection for
 /// which the given predicate returns true when run as a generator.
 /// </summary>
@@ -345,6 +330,19 @@ let sequence l =
 /// <param name="g">The generator to replicate.</param>
 let vector n g =
     sequence [ for _ in [ 1..n ] -> g ]
+
+///// <summary>
+///// Generates a random permutation of the given list.
+///// </summary>
+///// <param name="xs">The list to permute.</param>
+let shuffle xs =
+    gen {
+        let! idxs = vector (Seq.length xs) (choose (-922337203, 922337203))
+        return xs
+               |> Seq.zip idxs
+               |> Seq.sortBy fst
+               |> Seq.map snd
+    }
 
 /// <summary>
 /// Generates a list of random length. The maximum length of the list depends

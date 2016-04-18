@@ -200,7 +200,6 @@ let ``Shuffle randomly permutes a given list`` count (xs : Generator<int>) =
         xs
         |> Seq.take length
         |> Seq.sort
-        |> Seq.toList
 
     let actual =
         sorted
@@ -216,6 +215,7 @@ let ``Shuffle returns an empty list when given an empty list`` =
         []
         |> Gen.shuffle
         |> Gen.generate
+        |> Seq.toList
 
     let expected = []
     expected =! actual
