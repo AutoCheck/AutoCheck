@@ -336,6 +336,8 @@ let vector n g =
 ///// </summary>
 ///// <param name="xs">The list to permute.</param>
 let shuffle xs =
+    // https://github.com/nick8325/quickcheck/commit/6c360c1b594b0243e51bfcd4e2428882570e7a51
+    // https://github.com/fscheck/FsCheck/pull/221#issuecomment-211845836
     let a = xs |> Seq.toArray
     gen {
         let gn = choose (-922337203, 922337203)
