@@ -200,6 +200,7 @@ let ``Shuffle randomly permutes a given list`` count (xs : Generator<int>) =
         xs
         |> Seq.take length
         |> Seq.sort
+        |> Seq.toArray
 
     let actual =
         sorted

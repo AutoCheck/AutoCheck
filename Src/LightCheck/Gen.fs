@@ -336,12 +336,15 @@ let vector n g =
 ///// </summary>
 ///// <param name="xs">The list to permute.</param>
 let shuffle xs =
+    let a = xs |> Seq.toArray
     gen {
-        let! idxs = vector (Seq.length xs) (choose (-922337203, 922337203))
-        return xs
-               |> Seq.zip idxs
+        let gn = choose (-922337203, 922337203)
+        let! v = vector a.Length gn
+        return a
+               |> Seq.zip v
                |> Seq.sortBy fst
                |> Seq.map snd
+               |> Seq.toArray
     }
 
 /// <summary>
