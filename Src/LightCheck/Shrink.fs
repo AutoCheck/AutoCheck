@@ -7,6 +7,7 @@
 /// Read more about how it works here:
 /// http://www.dcc.fc.up.pt/~pbv/aulas/tapf/slides/quickcheck.html#shrinking
 /// </summary>
+[<RequireQualifiedAccess>]
 module LightCheck.Shrink
 
 open FSharp.Core.LanguagePrimitives
