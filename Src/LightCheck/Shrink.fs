@@ -7,7 +7,6 @@
 /// Read more about how it works here:
 /// http://www.dcc.fc.up.pt/~pbv/aulas/tapf/slides/quickcheck.html#shrinking
 /// </summary>
-[<RequireQualifiedAccess>]
 module LightCheck.Shrink
 
 open FSharp.Core.LanguagePrimitives
@@ -16,7 +15,6 @@ open FSharp.Core.LanguagePrimitives
 /// A shrinker for values of type 'a.
 /// </summary>
 type Shrink<'a> =
-    private
     | Shrink of ('a -> 'a seq)
 
 /// <summary>
@@ -42,20 +40,6 @@ let inline number n =
     |> Seq.append (if n < GenericZero then Seq.singleton -n
                    else Seq.empty)
     |> Seq.distinct
-
-/// <summary>
-/// Injects a function of type 'a -> 'a seq into a shrinker.
-/// </summary>
-/// <param name="f">The function to inject into a shrinker.</param>
-let init f = Shrink f
-
-/// <summary>
-/// Returns a value of type 'a -> 'a seq out of a shrinker.
-/// </summary>
-/// <param name="f">
-/// The union case from where the shrink function must be returned.
-/// </param>
-let evaluate (Shrink f) = f
 
 /// <summary>
 /// Shrinks a sequence of elements of type 'a. First it yields an empty
