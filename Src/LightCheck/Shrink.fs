@@ -50,10 +50,14 @@ let inline number n =
 /// The shrinker function, to be applied on each element of the list.
 /// </param>
 /// <param name="xs">The input sequence to shrink.</param>
-let list xs (Shrink f) =
-    seq {
-        yield []
-        for x in xs do
-            for y in f x do
-                yield [ y ]
-    }
+let list xs (Shrink shr) =
+    let rec shrinkImp xs =
+        match xs with
+        | []       -> Seq.empty
+        | (h :: t) ->
+            seq {
+                yield []
+                for h' in        shr h  -> h' :: t
+                for t' in (shrinkImp t) -> h  :: t'
+            }
+    shrinkImp xs
