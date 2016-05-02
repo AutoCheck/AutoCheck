@@ -37,18 +37,22 @@ let ``Numbers are shrinked towards smaller ones`` (fixture : IFixture) =
     Seq.compareWith Operators.compare expected actual =! 0
 
 [<Theory; AutoData>]
-let ``Lists are shrinked based on the supplied shrinker`` (xs : int seq) =
+let ``Lists are shrinked based on the supplied shrinker`` (sq : int seq) =
+    let l = Seq.toList sq
     let shrinker = Shrink number
 
-    let actual = shrinker |> Shrink.list xs
+    let actual = Shrink.list l shrinker
 
     let expected =
-        let (Shrink f) = shrinker
-        seq {
-            yield []
-            for x in xs do
-                for y in f x do
-                    yield [ y ]
-        }
-
+        let (Shrink shrf) = shrinker
+        let rec shrink xs =
+            match xs with
+            | []       -> Seq.empty
+            | (h :: t) ->
+                seq {
+                    yield []
+                    for h' in    shrf h  -> h' :: t
+                    for t' in (shrink t) -> h  :: t'
+                }
+        shrink l
     Seq.compareWith Operators.compare expected actual =! 0
