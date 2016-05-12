@@ -46,7 +46,7 @@ let inline number n =
 /// sequence, and then it iterates the input sequence, and shrinks each
 /// one of the items given the shrinker which is passed as a parameter.
 /// </summary>
-/// <param name="f">
+/// <param name="shr">
 /// The shrinker function, to be applied on each element of the list.
 /// </param>
 /// <param name="xs">The input sequence to shrink.</param>
