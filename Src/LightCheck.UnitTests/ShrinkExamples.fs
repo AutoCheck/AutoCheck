@@ -39,7 +39,7 @@ let ``Numbers are shrinked towards smaller ones`` (fixture : IFixture) =
 [<Theory; AutoData>]
 let ``Lists are shrinked based on the supplied shrinker`` (sq : int seq) =
     let l = Seq.toList sq
-    let shrinker = Shrink number
+    let shrinker = Shrink Shrink.number
 
     let actual = Shrink.list l shrinker
 
