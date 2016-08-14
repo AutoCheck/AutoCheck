@@ -1,12 +1,12 @@
 REDIRECTS: ON
 NUGET
-  remote: https://nuget.org/api/v2
-  specs:
-    AutoFixture (3.37.0)
-    AutoFixture.Xunit (3.37.0)
-      AutoFixture (>= 3.37.0)
-      xunit.extensions (>= 1.8.0.1549 < 2.0.0)
-    Unquote (3.1.0)
+  remote: https://www.nuget.org/api/v2
+    AutoFixture (3.37)
+    AutoFixture.Xunit (3.37)
+      AutoFixture (>= 3.37)
+      xunit.extensions (>= 1.8.0.1549 < 2.0)
+    FAKE (4.38.3)
+    Unquote (3.1)
     xunit (1.9.2)
     xunit.extensions (1.9.2)
       xunit (1.9.2)
