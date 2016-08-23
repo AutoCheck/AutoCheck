@@ -2,7 +2,7 @@ redirects: on
 source https://www.nuget.org/api/v2
 
 nuget FAKE
-nuget Fantomas
+nuget FantomasCLI
 
 nuget AutoFixture.Xunit
 nuget Unquote >= 3.0
